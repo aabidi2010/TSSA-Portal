@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BITSUMMIT — TSSA-Intune Mobile Environment Build & Nuclear Inspector Pilot Deployment</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --dark-blue: #001E35;
+            --vermilion: #F12300;
+            --light-vermilion: #FFF3F0;
+            --bg: #f4f6f9;
+            --card: #ffffff;
+            --text: #1a1a2e;
+            --text-sec: #6c757d;
+            --green: #22c55e;
+            --yellow: #f59e0b;
+            --blue: #3b82f6;
+            --red: #ef4444;
+            --gray: #94a3b8;
+            --gap: 16px;
+            --radius: 10px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+        .container { max-width: 1440px; margin: 0 auto; padding: var(--gap); }
+
+        /* Header */
+        .header { background: linear-gradient(135deg, var(--dark-blue) 0%, #003055 100%); color: #fff; padding: 24px 32px; border-radius: var(--radius); margin-bottom: var(--gap); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+        .header h1 span { color: var(--vermilion); }
+        .header-meta { font-size: 13px; opacity: 0.8; }
+        .header-right { display: flex; gap: 12px; align-items: center; }
+        .btn { padding: 8px 16px; border-radius: 6px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: var(--vermilion); color: #fff; }
+        .btn-primary:hover { background: #d41f00; }
+        .btn-outline { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+        .btn-outline:hover { background: rgba(255,255,255,0.1); }
+        .btn-green { background: var(--green); color: #fff; }
+        .btn-green:hover { background: #16a34a; }
+        .sync-indicator { font-size: 11px; opacity: 0.8; display: flex; align-items: center; gap: 6px; }
+        .sync-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .sync-dot.connected { background: var(--green); }
+        .sync-dot.disconnected { background: var(--yellow); }
+        .sync-dot.syncing { background: var(--blue); animation: pulse 1s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* KPI Row */
+        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--gap); margin-bottom: var(--gap); }
+        .kpi { background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border-left: 4px solid var(--gray); }
+        .kpi.green { border-left-color: var(--green); }
+        .kpi.yellow { border-left-color: var(--yellow); }
+        .kpi.blue { border-left-color: var(--blue); }
+        .kpi.red { border-left-color: var(--vermilion); }
+        .kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-sec); margin-bottom: 4px; }
+        .kpi-value { font-size: 32px; font-weight: 800; }
+        .kpi-sub { font-size: 12px; color: var(--text-sec); margin-top: 2px; }
+
+        /* Sections */
+        .section { background: var(--card); border-radius: var(--radius); padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: var(--gap); }
+        .section-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .section-title .badge { font-size: 11px; background: var(--dark-blue); color: #fff; padding: 2px 8px; border-radius: 10px; }
+        .section-title .badge-green { font-size: 11px; background: var(--green); color: #fff; padding: 2px 8px; border-radius: 10px; }
+
+        /* Phase bars */
+        .phase-row { display: flex; align-items: center; margin-bottom: 12px; }
+        .phase-label { width: 240px; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+        .phase-label small { font-weight: 400; color: var(--text-sec); display: block; font-size: 11px; }
+        .phase-bar-wrap { flex: 1; height: 32px; background: #e9ecef; border-radius: 6px; position: relative; overflow: hidden; }
+        .phase-bar { height: 100%; border-radius: 6px; transition: width 0.5s ease; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; min-width: 40px; }
+        .phase-bar.p1 { background: linear-gradient(90deg, var(--blue), #60a5fa); }
+        .phase-bar.p2 { background: linear-gradient(90deg, #6366f1, #818cf8); }
+        .phase-bar.p3 { background: linear-gradient(90deg, var(--yellow), #fbbf24); }
+        .phase-bar.p4 { background: linear-gradient(90deg, var(--green), #4ade80); }
+        .phase-bar.p5 { background: linear-gradient(90deg, var(--vermilion), #f87171); }
+        .phase-bar.pm { background: linear-gradient(90deg, var(--gray), #cbd5e1); }
+        .phase-dates { width: 160px; text-align: right; font-size: 11px; color: var(--text-sec); flex-shrink: 0; padding-left: 12px; }
+
+        /* Two/Three column */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); margin-bottom: var(--gap); }
+        .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--gap); margin-bottom: var(--gap); }
+        @media (max-width: 900px) { .two-col, .three-col { grid-template-columns: 1fr; } }
+
+        /* CSS Bar Chart */
+        .css-chart { display: flex; align-items: flex-end; gap: 12px; height: 200px; padding: 0 8px; border-bottom: 2px solid #e2e8f0; margin-bottom: 8px; }
+        .css-bar-group { flex: 1; display: flex; gap: 3px; align-items: flex-end; justify-content: center; position: relative; }
+        .css-bar { border-radius: 4px 4px 0 0; transition: height 0.4s ease; min-width: 16px; position: relative; }
+        .css-bar:hover { opacity: 0.85; }
+        .css-bar-val { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 700; white-space: nowrap; }
+        .css-bar-label { text-align: center; font-size: 11px; color: var(--text-sec); margin-top: 6px; line-height: 1.2; }
+        .chart-legend { display: flex; gap: 16px; justify-content: center; margin-top: 12px; }
+        .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-sec); }
+        .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+
+        /* CSS Donut */
+        .donut-wrap { display: flex; align-items: center; gap: 24px; justify-content: center; }
+        .donut { width: 160px; height: 160px; border-radius: 50%; position: relative; }
+        .donut-hole { width: 90px; height: 90px; background: var(--card); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .donut-hole .big { font-size: 24px; font-weight: 800; color: var(--text); }
+        .donut-hole .small { font-size: 10px; color: var(--text-sec); }
+        .donut-legend { font-size: 13px; }
+        .donut-legend-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .donut-legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+        .donut-legend-label { color: var(--text-sec); }
+        .donut-legend-val { font-weight: 700; margin-left: auto; }
+
+        /* Tabs */
+        .tabs { display: flex; gap: 4px; margin-bottom: var(--gap); background: var(--card); padding: 6px; border-radius: var(--radius); box-shadow: 0 1px 3px rgba(0,0,0,0.06); flex-wrap: wrap; }
+        .tab { padding: 10px 20px; border-radius: 8px; border: none; background: transparent; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--text-sec); transition: all 0.2s; }
+        .tab.active { background: var(--dark-blue); color: #fff; }
+        .tab:hover:not(.active) { background: #f1f5f9; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Task Table */
+        .task-filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+        .task-filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
+        .task-filter-btn.active { background: var(--dark-blue); color: #fff; border-color: var(--dark-blue); }
+        .task-filter-btn:hover:not(.active) { background: #f1f5f9; }
+        .task-filter-btn.critical-btn { border-color: var(--red); color: var(--red); }
+        .task-filter-btn.critical-btn.active { background: var(--red); color: #fff; border-color: var(--red); }
+
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        thead th { text-align: left; padding: 10px 12px; border-bottom: 2px solid #e2e8f0; color: var(--text-sec); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; white-space: nowrap; cursor: pointer; user-select: none; }
+        thead th:hover { color: var(--text); }
+        tbody td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        tbody tr:hover { background: #fafbfc; }
+        tbody tr.completed-row td { opacity: 0.55; text-decoration: line-through; }
+
+        .status-select { padding: 4px 8px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 12px; background: #fff; cursor: pointer; }
+        .check-toggle { width: 18px; height: 18px; border: 2px solid #cbd5e1; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+        .check-toggle.checked { background: var(--green); border-color: var(--green); }
+        .check-toggle.checked::after { content: '\2713'; color: #fff; font-size: 12px; font-weight: 700; }
+
+        .owner { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; }
+        .owner-avatar { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #fff; flex-shrink: 0; }
+        .owner-avatar.am { background: #6366f1; }
+        .owner-avatar.rj { background: var(--vermilion); }
+        .owner-avatar.ha { background: #22c55e; }
+        .owner-avatar.ts { background: #f59e0b; }
+        .owner-avatar.km { background: #8b5cf6; }
+        .owner-avatar.rz { background: var(--blue); }
+        .owner-avatar.su { background: #d97706; }
+        .owner-avatar.mp { background: var(--gray); }
+        .owner-avatar.nl { background: #ec4899; }
+        .owner-avatar.al { background: var(--dark-blue); }
+        .priority { font-size: 11px; font-weight: 700; }
+        .priority.critical { color: var(--red); }
+        .priority.high { color: #d97706; }
+        .priority.medium { color: var(--blue); }
+        .priority.low { color: var(--gray); }
+        .phase-tag { padding: 1px 6px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+
+        /* Dependency Flow */
+        .dep-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+        .dep-flow:last-child { border-bottom: none; }
+        .dep-node { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+        .dep-arrow { color: var(--text-sec); font-size: 18px; }
+
+        /* Risk */
+        .risk-row { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f5f9; gap: 12px; }
+        .risk-row:last-child { border-bottom: none; }
+        .risk-severity { width: 8px; height: 32px; border-radius: 4px; flex-shrink: 0; }
+        .risk-severity.high { background: var(--red); }
+        .risk-severity.medium { background: var(--yellow); }
+        .risk-severity.low { background: var(--green); }
+        .risk-info { flex: 1; }
+        .risk-info .risk-name { font-size: 13px; font-weight: 600; }
+        .risk-info .risk-detail { font-size: 11px; color: var(--text-sec); }
+        .risk-badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+
+        /* Milestones */
+        .milestone-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+        .milestone-row:last-child { border-bottom: none; }
+        .ms-date { width: 100px; font-size: 12px; font-weight: 700; color: var(--text-sec); flex-shrink: 0; }
+        .ms-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .ms-name { font-size: 13px; }
+
+        /* Deliverable Progress */
+        .prog-bar-wrap { display: flex; align-items: center; gap: 8px; }
+        .prog-bar-track { flex: 1; height: 6px; background: #e9ecef; border-radius: 3px; overflow: hidden; }
+        .prog-bar-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+        .prog-input { width: 45px; padding: 2px 4px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 12px; text-align: center; }
+
+        /* Action Items */
+        .action-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+        .action-row:last-child { border-bottom: none; }
+
+        /* RACI */
+        .raci-table th, .raci-table td { text-align: center; padding: 8px 6px; font-size: 12px; }
+        .raci-table td:first-child, .raci-table th:first-child { text-align: left; min-width: 200px; }
+        .raci-cell { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 10px; color: #fff; }
+        .raci-cell.R { background: var(--vermilion); }
+        .raci-cell.A { background: var(--dark-blue); }
+        .raci-cell.C { background: var(--blue); }
+        .raci-cell.I { background: var(--gray); }
+
+        /* Comms */
+        .comm-row { display: grid; grid-template-columns: 1.2fr 1.2fr 1fr 0.8fr; gap: 8px; padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+        .comm-row:first-child { font-weight: 700; color: var(--text-sec); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #e2e8f0; }
+        .comm-row:hover:not(:first-child) { background: #fafbfc; }
+
+        /* Contact Card */
+        .contact-card { padding: 16px; border: 1px solid #e2e8f0; border-radius: var(--radius); transition: transform 0.2s, box-shadow 0.2s; }
+        .contact-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+        /* Gantt */
+        .gantt-container { overflow-x: auto; padding: 10px 0; }
+        .gantt-row { display: flex; align-items: center; margin-bottom: 3px; min-height: 26px; }
+        .gantt-label { min-width: 200px; max-width: 200px; font-size: 11px; font-weight: 600; color: #334155; padding-right: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .gantt-track { flex: 1; height: 20px; position: relative; background: #f8fafc; border-radius: 3px; min-width: 600px; }
+        .gantt-bar { position: absolute; height: 16px; top: 2px; border-radius: 4px; font-size: 10px; color: #fff; display: flex; align-items: center; padding: 0 6px; white-space: nowrap; overflow: hidden; cursor: pointer; transition: opacity 0.15s; }
+        .gantt-bar:hover { opacity: 0.8; }
+        .gantt-bar.complete { background: var(--green); }
+        .gantt-bar.in-progress { background: var(--blue); }
+        .gantt-bar.not-started { background: #cbd5e1; }
+        .gantt-bar.ongoing { background: var(--yellow); }
+        .gantt-bar.blocked { background: var(--red); }
+        .gantt-week-header { display: flex; margin-bottom: 6px; }
+        .gantt-week-header .gantt-label { font-size: 10px; text-transform: uppercase; color: var(--text-sec); }
+        .gantt-week-header .gantt-track { display: flex; }
+        .gantt-week-label { flex: 1; font-size: 10px; color: var(--text-sec); font-weight: 600; text-align: center; border-left: 1px solid #e2e8f0; }
+        .gantt-today { position: absolute; width: 2px; background: var(--vermilion); top: 0; bottom: 0; z-index: 5; opacity: 0.7; }
+
+        /* Project Info Table */
+        .info-table td { padding: 8px 12px; }
+        .info-table td:first-child { font-weight: 700; color: var(--text-sec); width: 200px; }
+
+        .footer { text-align: center; padding: 24px; font-size: 12px; color: var(--text-sec); }
+        .footer strong { color: var(--dark-blue); }
+
+        /* Setup Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: #fff; border-radius: 16px; padding: 40px; max-width: 520px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .modal h2 { font-size: 20px; margin-bottom: 8px; color: var(--dark-blue); }
+        .modal p { font-size: 14px; color: var(--text-sec); margin-bottom: 20px; line-height: 1.6; }
+        .modal label { font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px; color: var(--text); }
+        .modal input { width: 100%; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; margin-bottom: 16px; }
+        .modal input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+        .modal .btn { width: 100%; padding: 12px; font-size: 15px; margin-top: 8px; }
+        .modal .error-msg { color: var(--red); font-size: 13px; margin-bottom: 12px; display: none; }
+        .modal .help-text { font-size: 12px; color: var(--text-sec); margin-top: -12px; margin-bottom: 16px; }
+
+        /* Export Modal */
+        .export-modal .modal { max-width: 440px; }
+        .export-option { display: flex; align-items: center; gap: 14px; padding: 14px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.15s; margin-bottom: 10px; }
+        .export-option:hover { background: #f8fafc; border-color: var(--blue); }
+        .export-icon { font-size: 24px; }
+        .export-title { font-weight: 700; font-size: 14px; color: var(--dark-blue); }
+        .export-desc { font-size: 12px; color: var(--text-sec); }
+
+        /* Toast */
+        .toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; border-radius: 8px; color: #fff; font-size: 13px; font-weight: 600; z-index: 1001; transform: translateY(80px); opacity: 0; transition: all 0.3s; }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { background: var(--green); }
+        .toast.error { background: var(--red); }
+        .toast.info { background: var(--blue); }
+
+        @media print {
+            body { background: #fff; }
+            .container { max-width: none; }
+            .btn, .task-filters, .status-select, .check-toggle, .prog-input, .tabs { display: none; }
+            .tab-content { display: block !important; page-break-before: always; }
+        }
+        @media (max-width: 768px) {
+            .header { flex-direction: column; align-items: flex-start; }
+            .kpi-row { grid-template-columns: repeat(2, 1fr); }
+            .phase-label { width: 140px; font-size: 11px; }
+            .phase-dates { width: 100px; font-size: 10px; }
+            .gantt-label { min-width: 120px; max-width: 120px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- GitHub Setup Modal -->
+<div class="modal-overlay" id="setupModal">
+    <div class="modal">
+        <h2>Connect to GitHub</h2>
+        <p>This portal syncs all task and deliverable data through GitHub so your entire team sees the same status in real time. Enter the connection details below (one-time setup).</p>
+        <div class="error-msg" id="setupError"></div>
+        <label>Repository Owner (GitHub username or org)</label>
+        <input type="text" id="inputOwner" placeholder="e.g. bitsummit-io">
+        <label>Repository Name</label>
+        <input type="text" id="inputRepo" placeholder="e.g. tssa-portal">
+        <label>Personal Access Token</label>
+        <input type="password" id="inputToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+        <div class="help-text">Fine-grained token with Contents read/write on this repo. Your PM will share this with you.</div>
+        <button class="btn btn-primary" onclick="connectGitHub()">Connect &amp; Sync</button>
+        <button class="btn" style="background:#f1f5f9;color:var(--text);margin-top:8px" onclick="useOffline()">Use Offline (localStorage only)</button>
+    </div>
+</div>
+
+<!-- Export Modal -->
+<div class="modal-overlay export-modal" id="exportModal">
+    <div class="modal">
+        <h2>Export Dashboard</h2>
+        <p>Download the current project status for offline sharing or reporting.</p>
+        <div class="export-option" onclick="exportExcel()">
+            <div class="export-icon">&#x1F4CA;</div>
+            <div><div class="export-title">Export to Excel (.xlsx)</div><div class="export-desc">Multi-sheet workbook with tasks, deliverables, risks &amp; action items</div></div>
+        </div>
+        <div class="export-option" onclick="window.print();hideExportModal()">
+            <div class="export-icon">&#x1F5A8;</div>
+            <div><div class="export-title">Print / Save as PDF</div><div class="export-desc">Print-optimized layout for all visible sections</div></div>
+        </div>
+        <div class="export-option" onclick="exportHTML()">
+            <div class="export-icon">&#x1F310;</div>
+            <div><div class="export-title">Download Dashboard (.html)</div><div class="export-desc">Self-contained file — share via email or open offline</div></div>
+        </div>
+        <button class="btn" style="background:#f1f5f9;color:var(--text);margin-top:12px" onclick="hideExportModal()">Close</button>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<div class="container">
+    <div class="header">
+        <div>
+            <h1><span>BITSUMMIT</span> — TSSA-Intune Mobile Environment Build &amp; Nuclear Inspector Pilot Deployment</h1>
+            <div class="header-meta">BITPT 264 &bull; CDW Canada Corp. &rarr; Technical Standards &amp; Safety Authority (TSSA)</div>
+        </div>
+        <div class="header-right">
+            <div class="sync-indicator" id="syncIndicator">
+                <div class="sync-dot disconnected" id="syncDot"></div>
+                <span id="syncLabel">Offline</span>
+            </div>
+            <button class="btn btn-outline" onclick="syncFromGitHub()" title="Pull latest from GitHub">&#x21BB; Refresh</button>
+            <button class="btn btn-outline" onclick="showExportModal()">Export</button>
+            <button class="btn btn-green" onclick="saveAndSync()">Save &amp; Sync</button>
+            <button class="btn btn-outline" onclick="showSetup()" title="GitHub settings">&#x2699;</button>
+        </div>
+    </div>
+
+    <div class="kpi-row" id="kpiRow"></div>
+    <div class="tabs" id="tabBar"></div>
+
+    <div class="tab-content active" id="tab-overview">
+        <div class="section">
+            <div class="section-title">Project Phase Progress <span class="badge">LIVE</span></div>
+            <div id="phaseProgress"></div>
+        </div>
+        <div class="two-col">
+            <div class="section">
+                <div class="section-title">Task Completion by Phase</div>
+                <div id="phaseChart"></div>
+            </div>
+            <div class="section">
+                <div class="section-title">Deliverable Status</div>
+                <div id="delivChart"></div>
+            </div>
+        </div>
+        <div class="two-col">
+            <div class="section">
+                <div class="section-title">Upcoming Milestones</div>
+                <div id="milestones"></div>
+            </div>
+            <div class="section">
+                <div class="section-title">Project Information</div>
+                <div id="projectInfo"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab-tasks">
+        <div class="section">
+            <div class="section-title">Task Tracker <span class="badge" id="taskCount"></span></div>
+            <div class="task-filters" id="taskFilters"></div>
+            <div style="overflow-x:auto">
+            <table>
+                <thead><tr>
+                    <th style="width:30px"></th><th onclick="sortTasks('id')">ID</th><th onclick="sortTasks('desc')">Task</th><th onclick="sortTasks('phase')">Phase</th><th onclick="sortTasks('owner')">Owner</th><th onclick="sortTasks('priority')">Priority</th><th onclick="sortTasks('start')">Start</th><th onclick="sortTasks('end')">End</th><th onclick="sortTasks('status')">Status</th>
+                </tr></thead>
+                <tbody id="taskBody"></tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab-gantt">
+        <div class="section">
+            <div class="section-title">Gantt Chart — Project Timeline <span class="badge">Apr 1 &ndash; May 31</span></div>
+            <div class="task-filters" id="ganttFilters"></div>
+            <div class="gantt-container" id="ganttChart"></div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab-deliverables">
+        <div class="section">
+            <div class="section-title">Deliverables Tracker</div>
+            <div style="overflow-x:auto">
+            <table>
+                <thead><tr><th>ID</th><th>Deliverable</th><th>Owner</th><th>Phase</th><th>Target Date</th><th>Progress</th><th>Status</th></tr></thead>
+                <tbody id="delivBody"></tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab-actions">
+        <div class="section">
+            <div class="section-title">Open Logistics: Action Items <span class="badge" id="actionCount"></span></div>
+            <div class="task-filters" id="actionFilters"></div>
+            <div id="actionList"></div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab-risks">
+        <div class="two-col">
+            <div class="section"><div class="section-title">Risk Register</div><div id="riskList"></div></div>
+            <div class="section"><div class="section-title">Key Dependencies</div><div id="depList"></div></div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab-raci">
+        <div class="section">
+            <div class="section-title">RACI Matrix</div>
+            <div style="margin-bottom:12px;display:flex;gap:14px;flex-wrap:wrap">
+                <span class="legend-item"><span class="raci-cell R" style="width:18px;height:18px;font-size:9px">R</span> Responsible</span>
+                <span class="legend-item"><span class="raci-cell A" style="width:18px;height:18px;font-size:9px">A</span> Accountable</span>
+                <span class="legend-item"><span class="raci-cell C" style="width:18px;height:18px;font-size:9px">C</span> Consulted</span>
+                <span class="legend-item"><span class="raci-cell I" style="width:18px;height:18px;font-size:9px">I</span> Informed</span>
+            </div>
+            <div style="overflow-x:auto" id="raciTable"></div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab-comms">
+        <div class="section">
+            <div class="section-title">Communication Plan</div>
+            <div id="commsTable"></div>
+        </div>
+        <div class="section">
+            <div class="section-title">Key Contacts</div>
+            <div class="three-col" id="contactCards"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <strong>BITSUMMIT</strong> — TSSA-Intune Mobile Environment Build & Nuclear Inspector Pilot Deployment — Synced via GitHub &bull; Last saved: <span id="lastSaved">Never</span>
+    </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// ALL DATA
+// ═══════════════════════════════════════
+var PHASES = [
+    {id:'p1',name:'Phase 1: Planning & Requirements Definition',dates:'Apr 1 \u2013 Apr 17',color:'p1',cost:3750,start:'2026-04-01',end:'2026-04-17'},
+    {id:'p2',name:'Phase 2: Intune Build & Baseline Policy Config',dates:'Apr 17 \u2013 May 5',color:'p2',cost:12750,start:'2026-04-17',end:'2026-05-05'},
+    {id:'p3',name:'Phase 3: Pilot Enrollment (POC) \u2013 2\u20133 Users',dates:'May 5 \u2013 May 15',color:'p3',cost:3600,start:'2026-05-05',end:'2026-05-15'},
+    {id:'p4',name:'Phase 4: Production Pilot \u2013 Up to 30 Users',dates:'May 12 \u2013 May 30',color:'p4',cost:7200,start:'2026-05-12',end:'2026-05-30'},
+    {id:'p5',name:'Phase 5: Knowledge Transfer & Documentation',dates:'May 27 \u2013 May 30',color:'p5',cost:4200,start:'2026-05-27',end:'2026-05-30'}
+];
+
+var TASKS = [
+    {id:'T01',desc:'Phase 1 Technical Working Session (discovery workshop)',owner:'Amitosh / TSSA IT',oc:'am',phase:'p1',start:'2026-04-08',end:'2026-04-10',status:'complete',pri:'high',chk:true},
+    {id:'T02',desc:'Validate M365 E3 / Intune MDM licensing',owner:'TSSA (Rizgar)',oc:'rz',phase:'p1',start:'2026-04-08',end:'2026-04-09',status:'complete',pri:'high',chk:true},
+    {id:'T03',desc:'Confirm Apple Business Manager enrollment status',owner:'TSSA (Rizgar)',oc:'rz',phase:'p1',start:'2026-04-07',end:'2026-04-09',status:'in-progress',pri:'high',chk:false},
+    {id:'T04',desc:'Confirm Defender for Endpoint mobile licensing',owner:'TSSA (Rizgar)',oc:'rz',phase:'p1',start:'2026-04-07',end:'2026-04-09',status:'in-progress',pri:'high',chk:false},
+    {id:'T05',desc:'Receive & review Bruce Power restriction documentation',owner:'Khalid / Hassan',oc:'km',phase:'p1',start:'2026-04-01',end:'2026-04-10',status:'in-progress',pri:'critical',chk:false},
+    {id:'T06',desc:'Confirm iCloud usage posture (allowed / restricted / conditional)',owner:'TSSA (Rizgar/Khalid)',oc:'rz',phase:'p1',start:'2026-04-07',end:'2026-04-11',status:'in-progress',pri:'medium',chk:false},
+    {id:'T07',desc:'Confirm AirWatch/Workspace ONE URL accessibility',owner:'TSSA (Rizgar)',oc:'rz',phase:'p1',start:'2026-04-07',end:'2026-04-11',status:'in-progress',pri:'medium',chk:false},
+    {id:'T08',desc:'Provision required access: M365, ABM, Defender, PKI, AirWatch',owner:'TSSA (Rizgar)',oc:'rz',phase:'p1',start:'2026-04-01',end:'2026-04-11',status:'in-progress',pri:'critical',chk:false},
+    {id:'T09',desc:'Define Intune architecture for mobile-only deployment',owner:'Amitosh',oc:'am',phase:'p1',start:'2026-04-09',end:'2026-04-14',status:'not-started',pri:'high',chk:false},
+    {id:'T10',desc:'Produce Requirements Summary & validated security controls list',owner:'Amitosh / Rejaa',oc:'am',phase:'p1',start:'2026-04-11',end:'2026-04-17',status:'not-started',pri:'high',chk:false},
+    {id:'T11',desc:'Configure enrollment restrictions & platform compliance baselines',owner:'Amitosh',oc:'am',phase:'p2',start:'2026-04-17',end:'2026-04-23',status:'not-started',pri:'high',chk:false},
+    {id:'T12',desc:'Configure device config profiles (camera, hotspot, USB/BT, network)',owner:'Amitosh',oc:'am',phase:'p2',start:'2026-04-17',end:'2026-04-23',status:'not-started',pri:'critical',chk:false},
+    {id:'T13',desc:'Configure Application Protection Policies (APP/MAM)',owner:'Amitosh',oc:'am',phase:'p2',start:'2026-04-21',end:'2026-04-24',status:'not-started',pri:'high',chk:false},
+    {id:'T14',desc:'Configure device compliance policies (OS version, encryption, PIN)',owner:'Amitosh',oc:'am',phase:'p2',start:'2026-04-21',end:'2026-04-24',status:'not-started',pri:'high',chk:false},
+    {id:'T15',desc:'Configure Conditional Access for pilot groups',owner:'Amitosh',oc:'am',phase:'p2',start:'2026-04-23',end:'2026-04-28',status:'not-started',pri:'high',chk:false},
+    {id:'T16',desc:'Configure certificate-based auth (SCEP/PKCS) \u2014 PKI by TSSA',owner:'Amitosh / TSSA',oc:'am',phase:'p2',start:'2026-04-23',end:'2026-04-28',status:'not-started',pri:'critical',chk:false},
+    {id:'T17',desc:'Integrate Microsoft Defender for Endpoint (Mobile)',owner:'Amitosh',oc:'am',phase:'p2',start:'2026-04-24',end:'2026-04-29',status:'not-started',pri:'high',chk:false},
+    {id:'T18',desc:'Integrate Defender risk signals with Conditional Access',owner:'Amitosh',oc:'am',phase:'p2',start:'2026-04-28',end:'2026-04-30',status:'not-started',pri:'high',chk:false},
+    {id:'T19',desc:'Configure Apple App Store & iCloud governance controls',owner:'Amitosh',oc:'am',phase:'p2',start:'2026-04-28',end:'2026-04-30',status:'not-started',pri:'medium',chk:false},
+    {id:'T20',desc:'Establish reporting/monitoring views (non-compliance, posture)',owner:'Amitosh',oc:'am',phase:'p2',start:'2026-04-29',end:'2026-05-01',status:'not-started',pri:'medium',chk:false},
+    {id:'T21',desc:'Configure assignment groups for inspector pilot deployment',owner:'Amitosh / TSSA',oc:'am',phase:'p2',start:'2026-04-29',end:'2026-05-01',status:'not-started',pri:'medium',chk:false},
+    {id:'T22',desc:'Produce Environment Build Document',owner:'Amitosh / Rejaa',oc:'am',phase:'p2',start:'2026-04-30',end:'2026-05-05',status:'not-started',pri:'high',chk:false},
+    {id:'T23',desc:"Prepare test devices for enrollment (Sutharsan's device)",owner:'TSSA (Sutharsan)',oc:'su',phase:'p3',start:'2026-05-05',end:'2026-05-07',status:'not-started',pri:'high',chk:false},
+    {id:'T24',desc:'Enroll 2\u20133 inspector devices into Intune',owner:'Amitosh / Sutharsan',oc:'am',phase:'p3',start:'2026-05-07',end:'2026-05-09',status:'not-started',pri:'critical',chk:false},
+    {id:'T25',desc:'Validate: camera, hotspot/tethering, app-blocking, OS restrictions',owner:'Amitosh / TSSA',oc:'am',phase:'p3',start:'2026-05-09',end:'2026-05-12',status:'not-started',pri:'critical',chk:false},
+    {id:'T26',desc:'Validate update channels & compliance monitoring',owner:'Amitosh / TSSA',oc:'am',phase:'p3',start:'2026-05-09',end:'2026-05-12',status:'not-started',pri:'high',chk:false},
+    {id:'T27',desc:'Validate certificate-based authentication workflows',owner:'Amitosh / TSSA',oc:'am',phase:'p3',start:'2026-05-09',end:'2026-05-12',status:'not-started',pri:'high',chk:false},
+    {id:'T28',desc:'Validate Defender for Endpoint onboarding & risk signal reporting',owner:'Amitosh',oc:'am',phase:'p3',start:'2026-05-09',end:'2026-05-12',status:'not-started',pri:'high',chk:false},
+    {id:'T29',desc:'Document pilot behaviour; make configuration adjustments',owner:'Amitosh',oc:'am',phase:'p3',start:'2026-05-12',end:'2026-05-14',status:'not-started',pri:'medium',chk:false},
+    {id:'T30',desc:'Produce POC Validation Findings & Refinements document',owner:'Amitosh / Rejaa',oc:'am',phase:'p3',start:'2026-05-13',end:'2026-05-15',status:'not-started',pri:'high',chk:false},
+    {id:'T31',desc:'Communicate Phase 4 start to inspectors (backup, prep)',owner:'TSSA (Rizgar)',oc:'rz',phase:'p4',start:'2026-05-12',end:'2026-05-15',status:'not-started',pri:'medium',chk:false},
+    {id:'T32',desc:'Enroll up to 30 users (15 inspectors + up to 15 IT)',owner:'Amitosh / TSSA',oc:'am',phase:'p4',start:'2026-05-15',end:'2026-05-20',status:'not-started',pri:'critical',chk:false},
+    {id:'T33',desc:'Validate security config consistency & non-compliance alerting',owner:'Amitosh / TSSA',oc:'am',phase:'p4',start:'2026-05-20',end:'2026-05-27',status:'not-started',pri:'high',chk:false},
+    {id:'T34',desc:'Validate app deployment (up to 5 apps incl. Office suite)',owner:'Amitosh / TSSA',oc:'am',phase:'p4',start:'2026-05-20',end:'2026-05-27',status:'not-started',pri:'high',chk:false},
+    {id:'T35',desc:'Validate connectivity restrictions under real-world use',owner:'TSSA (Inspectors)',oc:'ts',phase:'p4',start:'2026-05-20',end:'2026-05-27',status:'not-started',pri:'critical',chk:false},
+    {id:'T36',desc:'Validate Defender risk-based access & cert-based auth',owner:'Amitosh / TSSA',oc:'am',phase:'p4',start:'2026-05-20',end:'2026-05-27',status:'not-started',pri:'high',chk:false},
+    {id:'T37',desc:'Compliance tuning & policy refinement',owner:'Amitosh',oc:'am',phase:'p4',start:'2026-05-22',end:'2026-05-28',status:'not-started',pri:'medium',chk:false},
+    {id:'T38',desc:'Produce Production Pilot Validation Report',owner:'Amitosh / Rejaa',oc:'am',phase:'p4',start:'2026-05-26',end:'2026-05-30',status:'not-started',pri:'high',chk:false},
+    {id:'T39',desc:'Deliver 1\u20132 hour KT session (policy, enrollment, compliance)',owner:'Amitosh / Hassan',oc:'am',phase:'p5',start:'2026-05-27',end:'2026-05-29',status:'not-started',pri:'high',chk:false},
+    {id:'T40',desc:'Provide administrative runbook (enrollment, policy, limitations)',owner:'Amitosh / Rejaa',oc:'am',phase:'p5',start:'2026-05-27',end:'2026-05-30',status:'not-started',pri:'high',chk:false},
+    {id:'T41',desc:'Submit final deliverables for TSSA review and acceptance',owner:'Rejaa',oc:'rj',phase:'p5',start:'2026-05-29',end:'2026-05-30',status:'not-started',pri:'critical',chk:false},
+    {id:'T42',desc:'Weekly Friday morning status cadence calls (all parties)',owner:'Rejaa',oc:'rj',phase:'pm',start:'2026-04-11',end:'2026-05-30',status:'ongoing',pri:'medium',chk:false},
+    {id:'T43',desc:'As-needed technical working sessions',owner:'Amitosh / Rejaa',oc:'am',phase:'pm',start:'2026-04-07',end:'2026-05-30',status:'ongoing',pri:'medium',chk:false},
+    {id:'T44',desc:'Maintain & distribute project plan and risk log',owner:'Rejaa',oc:'rj',phase:'pm',start:'2026-04-07',end:'2026-05-30',status:'ongoing',pri:'medium',chk:false},
+    {id:'T45',desc:'SharePoint site setup for centralised documentation',owner:'TSSA (Mandeep)',oc:'mp',phase:'pm',start:'2026-04-07',end:'2026-04-11',status:'complete',pri:'medium',chk:true},
+    {id:'T46',desc:'Coordinate fiscal year-end invoicing with CDW (Niel)',owner:'Rizgar / Niel',oc:'rz',phase:'pm',start:'2026-04-01',end:'2026-04-30',status:'in-progress',pri:'medium',chk:false}
+];
+
+var DELIVERABLES = [
+    {id:'D1',name:'Requirements Summary & Validated Security Controls List',owner:'Amitosh / Rejaa',oc:'am',phase:'p1',target:'Apr 17, 2026',progress:0,status:'not-started'},
+    {id:'D2',name:'Environment Build Document',owner:'Amitosh / Rejaa',oc:'am',phase:'p2',target:'May 5, 2026',progress:0,status:'not-started'},
+    {id:'D3',name:'POC Validation Findings & Recommended Refinements',owner:'Amitosh / Rejaa',oc:'am',phase:'p3',target:'May 15, 2026',progress:0,status:'not-started'},
+    {id:'D4',name:'Production Pilot Validation Report',owner:'Amitosh / Rejaa',oc:'am',phase:'p4',target:'May 30, 2026',progress:0,status:'not-started'},
+    {id:'D5',name:'Administrative Runbook',owner:'Amitosh / Rejaa',oc:'am',phase:'p5',target:'May 30, 2026',progress:0,status:'not-started'},
+    {id:'D6',name:'Knowledge Transfer Session (1\u20132 hrs)',owner:'Amitosh / Hassan',oc:'ha',phase:'p5',target:'May 29, 2026',progress:0,status:'not-started'}
+];
+
+var ACTIONS = [
+    {owner:'Rejaa Khalid',oc:'rj',desc:'Send post-meeting email: minutes, kick-off deck, access requirements list',due:'April 1, 2026',status:'complete'},
+    {owner:'Rejaa Khalid',oc:'rj',desc:'Schedule weekly Friday morning cadence call (before noon) with all parties',due:'April 4, 2026',status:'complete'},
+    {owner:'Rejaa Khalid',oc:'rj',desc:'Consult Amitosh; propose 2\u20133 slots for Phase 1 technical working session',due:'April 2, 2026',status:'complete'},
+    {owner:'Rejaa Khalid',oc:'rj',desc:'Set up project plan and shared risk log; distribute to all parties',due:'April 15, 2026',status:'in-progress'},
+    {owner:'TSSA (Mandeep)',oc:'mp',desc:'Create and configure SharePoint site for project documentation',due:'Early next week',status:'complete'},
+    {owner:'Khalid Mahmood',oc:'km',desc:'Forward Bruce Power device restriction documentation to Hassan and Rejaa',due:'ASAP',status:'in-progress'},
+    {owner:'TSSA (Rizgar)',oc:'rz',desc:'Confirm accessibility of new AirWatch / Workspace ONE URL (public vs. firewall)',due:'Before Phase 1 workshop',status:'not-started'},
+    {owner:'TSSA (Rizgar)',oc:'rz',desc:'Begin provisioning required access: M365, ABM, Defender, PKI, AirWatch',due:'Upon receipt of email',status:'in-progress'},
+    {owner:'TSSA (Rizgar)',oc:'rz',desc:'Begin communication with nuclear inspectors re: pilot participation, timeline, backup prep',due:'Ahead of Phase 3',status:'not-started'}
+];
+
+var RISKS = [
+    {id:'R1',name:'Bruce Power restrictions not received',detail:'Blocks Phase 1 completion and architecture decisions',sev:'high',mitigation:'Khalid to escalate with Bruce Power; Rejaa to follow up weekly',owner:'Khalid / Rejaa'},
+    {id:'R2',name:'TSSA access provisioning delayed',detail:'M365, ABM, Defender, PKI, AirWatch \u2014 blocks Phase 2 start',sev:'high',mitigation:'Rizgar to begin provisioning immediately; Rejaa to track daily',owner:'Rizgar / Rejaa'},
+    {id:'R3',name:'PKI/NDES infrastructure issues',detail:'Not operational or incompatible with Intune SCEP/PKCS',sev:'high',mitigation:'BITSUMMIT consumes existing PKI only; flag early in Phase 1',owner:'TSSA / Amitosh'},
+    {id:'R4',name:'iCloud governance complexity',detail:'Conflicting MDM profiles if AirWatch-enrolled device restores used',sev:'medium',mitigation:'Define posture in Phase 1; pilot complex configs in Phase 4',owner:'Amitosh / Rizgar'},
+    {id:'R5',name:'Inspector device availability for POC',detail:'Risk of disrupting inspector workflow during enrollment',sev:'medium',mitigation:"Use Sutharsan's device / test device for Phase 3 POC",owner:'TSSA (Sutharsan)'},
+    {id:'R6',name:'Fiscal year-end invoicing',detail:'End of April \u2014 billing complications with CDW',sev:'medium',mitigation:'Rizgar to coordinate with Niel (CDW) on invoicing schedule',owner:'Rizgar / Niel'},
+    {id:'R7',name:'Device OS restriction API support',detail:'Device models may not support camera/tethering restriction APIs',sev:'medium',mitigation:'Identify pilot device models in Phase 1, confirm OS support',owner:'Amitosh / TSSA'},
+    {id:'R8',name:'Scope creep',detail:'Requests beyond nuclear inspector pilot & foundational build',sev:'low',mitigation:'SOW excludes full AirWatch replacement (~300 devices). Changes require formal CR',owner:'Rejaa'}
+];
+
+var DEPS = [
+    {from:'Bruce Power Docs (T05)',to:'Architecture Design (T09)',c:'#ef4444'},
+    {from:'Access Provisioning (T08)',to:'All Phase 2 Tasks',c:'#ef4444'},
+    {from:'PKI Infrastructure (TSSA)',to:'Cert-Based Auth (T16)',c:'#6366f1'},
+    {from:'Defender Licensing (T04)',to:'Defender Integration (T17)',c:'#3b82f6'},
+    {from:'ABM Status (T03)',to:'iOS Enrollment (T24)',c:'#8b5cf6'},
+    {from:'Environment Build (P2)',to:'POC Enrollment (P3)',c:'#f59e0b'},
+    {from:'POC Validation (T30)',to:'Production Pilot (P4)',c:'#22c55e'},
+    {from:'iCloud Posture (T06)',to:'App Store & iCloud Controls (T19)',c:'#d97706'},
+    {from:'All Deliverables (D1\u2013D6)',to:'Final Acceptance (T41)',c:'#F12300'}
+];
+
+var MILESTONES = [
+    {date:'Apr 1',name:'Project Kick-off Meeting',done:true},
+    {date:'Apr 8\u201310',name:'Phase 1 Technical Workshop',done:true},
+    {date:'Apr 17',name:'D1 Requirements Summary Delivery',done:false,active:true},
+    {date:'May 5',name:'D2 Environment Build Document Complete',done:false},
+    {date:'May 7\u20139',name:'POC Enrollment (2\u20133 devices)',done:false},
+    {date:'May 15',name:'D3 POC Findings Delivered',done:false},
+    {date:'May 15\u201320',name:'Production Pilot Enrollment (30 users)',done:false},
+    {date:'May 27\u201329',name:'Knowledge Transfer Session',done:false},
+    {date:'May 30',name:'FINAL DELIVERABLES & PROJECT CLOSE',done:false}
+];
+
+var RACI_DATA = [
+    {a:'Kickoff meeting facilitation',rj:'A',am:'C',ha:'C',rz:'C',kh:'C',su:'',md:''},
+    {a:'Validate M365 E3 / Intune licensing',rj:'I',am:'C',ha:'I',rz:'R',kh:'',su:'',md:''},
+    {a:'Confirm Apple Business Manager status',rj:'I',am:'C',ha:'I',rz:'R',kh:'',su:'',md:''},
+    {a:'Confirm Defender for Endpoint licensing',rj:'I',am:'C',ha:'I',rz:'R',kh:'',su:'',md:''},
+    {a:'Receive & review Bruce Power restrictions',rj:'A',am:'C',ha:'R',rz:'',kh:'R',su:'',md:''},
+    {a:'Confirm iCloud usage posture',rj:'A',am:'C',ha:'I',rz:'R',kh:'C',su:'',md:''},
+    {a:'Provision required access',rj:'A',am:'C',ha:'I',rz:'R',kh:'',su:'',md:''},
+    {a:'Define Intune mobile architecture',rj:'I',am:'R',ha:'C',rz:'C',kh:'',su:'',md:''},
+    {a:'Produce Requirements Summary',rj:'A',am:'R',ha:'C',rz:'C',kh:'',su:'',md:''},
+    {a:'Configure enrollment restrictions',rj:'I',am:'R',ha:'C',rz:'C',kh:'',su:'',md:''},
+    {a:'Configure device config profiles',rj:'I',am:'R',ha:'C',rz:'C',kh:'',su:'',md:''},
+    {a:'Configure APP/MAM policies',rj:'I',am:'R',ha:'C',rz:'',kh:'',su:'',md:''},
+    {a:'Configure cert-based auth (SCEP/PKCS)',rj:'I',am:'R',ha:'C',rz:'R',kh:'',su:'',md:''},
+    {a:'Integrate Defender for Endpoint',rj:'I',am:'R',ha:'C',rz:'C',kh:'',su:'',md:''},
+    {a:'Configure App Store & iCloud controls',rj:'I',am:'R',ha:'C',rz:'C',kh:'',su:'',md:''},
+    {a:'Produce Environment Build Document',rj:'A',am:'R',ha:'C',rz:'I',kh:'',su:'',md:''},
+    {a:'Prepare test devices for enrollment',rj:'I',am:'C',ha:'I',rz:'',kh:'',su:'R',md:''},
+    {a:'Enroll 2\u20133 inspector devices',rj:'I',am:'R',ha:'C',rz:'',kh:'',su:'C',md:''},
+    {a:'Validate restrictions (camera, hotspot, etc.)',rj:'I',am:'R',ha:'C',rz:'C',kh:'',su:'C',md:''},
+    {a:'Produce POC Validation Findings',rj:'A',am:'R',ha:'C',rz:'I',kh:'',su:'',md:''},
+    {a:'Enroll up to 30 users',rj:'I',am:'R',ha:'C',rz:'C',kh:'',su:'C',md:''},
+    {a:'Produce Production Pilot Report',rj:'A',am:'R',ha:'C',rz:'I',kh:'',su:'',md:''},
+    {a:'Deliver KT session',rj:'I',am:'R',ha:'R',rz:'C',kh:'',su:'',md:''},
+    {a:'Submit final deliverables',rj:'R',am:'C',ha:'C',rz:'A',kh:'',su:'',md:''},
+    {a:'Weekly Friday status calls',rj:'R',am:'C',ha:'C',rz:'C',kh:'C',su:'',md:''},
+    {a:'SharePoint site setup',rj:'I',am:'',ha:'I',rz:'I',kh:'',su:'',md:'R'}
+];
+
+var COMMS = [
+    {type:'Weekly Status Cadence Call',freq:'Weekly, Fridays before noon \u2014 Teams',who:'All parties; Khalid & Rizgar for approvals',owner:'Rejaa Khalid'},
+    {type:'Technical Working Sessions',freq:'As-needed \u2014 Teams',who:'Amitosh, Sutharsan, Mandeep',owner:'Amitosh / Rejaa'},
+    {type:'Meeting Minutes',freq:'After each meeting \u2014 email',who:'All parties + distribution list',owner:'Rejaa Khalid'},
+    {type:'Project Plan & Risk Log',freq:'Maintained weekly \u2014 SharePoint',who:'All parties',owner:'Rejaa Khalid'},
+    {type:'Deliverable Reviews',freq:'Per phase completion \u2014 email + SharePoint',who:'TSSA (Rizgar / Khalid), CDW (Niel)',owner:'Rejaa Khalid'},
+    {type:'Day-to-day Communication',freq:'Ongoing \u2014 Teams channel',who:'All parties',owner:'All'}
+];
+
+var CONTACTS = [
+    {name:'Rejaa Khalid',role:'Project Manager',org:'BITSUMMIT',oc:'rj'},
+    {name:'Amitosh',role:'Technical Lead',org:'BITSUMMIT',oc:'am'},
+    {name:'Hassan Abidi',role:'Engagement Delivery Lead',org:'BITSUMMIT',oc:'ha'},
+    {name:'Rizgar',role:'IT Lead',org:'TSSA',oc:'rz'},
+    {name:'Khalid Mahmood',role:'Director',org:'TSSA',oc:'km'},
+    {name:'Sutharsan R.',role:'IT Support / Testing',org:'TSSA',oc:'su'},
+    {name:'Mandeep',role:'SharePoint / Documentation',org:'TSSA',oc:'mp'},
+    {name:'Niel',role:'Account Representative',org:'CDW Canada',oc:'nl'}
+];
+
+// ═══════════════════════════════════════
+// GITHUB SYNC ENGINE
+// ═══════════════════════════════════════
+var ghConfig = null;
+var ghFileSHA = null;
+var syncMode = 'offline';
+
+function getGHConfig() { try { return JSON.parse(localStorage.getItem('tssa_gh_config') || 'null'); } catch(e) { return null; } }
+function saveGHConfig(owner, repo, token) { var c = { owner: owner, repo: repo, token: token }; localStorage.setItem('tssa_gh_config', JSON.stringify(c)); ghConfig = c; }
+
+function showSetup() { var m = document.getElementById('setupModal'); m.classList.add('active'); if (ghConfig) { document.getElementById('inputOwner').value = ghConfig.owner || ''; document.getElementById('inputRepo').value = ghConfig.repo || ''; document.getElementById('inputToken').value = ghConfig.token || ''; } }
+function hideSetup() { document.getElementById('setupModal').classList.remove('active'); }
+function showExportModal() { document.getElementById('exportModal').classList.add('active'); }
+function hideExportModal() { document.getElementById('exportModal').classList.remove('active'); }
+
+function useOffline() { syncMode = 'offline'; hideSetup(); loadLocalState(); renderAll(); updateSyncUI(); showToast('Working offline. Data saved to this browser only.', 'info'); }
+
+function connectGitHub() {
+    var owner = document.getElementById('inputOwner').value.trim();
+    var repo = document.getElementById('inputRepo').value.trim();
+    var token = document.getElementById('inputToken').value.trim();
+    var errEl = document.getElementById('setupError');
+    if (!owner || !repo || !token) { errEl.textContent = 'All fields are required.'; errEl.style.display = 'block'; return; }
+    if (token.length < 10) { errEl.textContent = 'Token looks too short.'; errEl.style.display = 'block'; return; }
+    errEl.style.display = 'none';
+    saveGHConfig(owner, repo, token);
+    setSyncStatus('syncing', 'Connecting...');
+    fetchGitHubState(function(ok) {
+        if (ok) { syncMode = 'github'; hideSetup(); renderAll(); updateSyncUI(); showToast('Connected to GitHub! All changes will sync.', 'success'); }
+        else { errEl.textContent = 'Could not connect. Check owner/repo/token.'; errEl.style.display = 'block'; setSyncStatus('disconnected', 'Connection failed'); }
+    });
+}
+
+function setSyncStatus(status, label) { document.getElementById('syncDot').className = 'sync-dot ' + status; document.getElementById('syncLabel').textContent = label; }
+function updateSyncUI() { if (syncMode === 'github') setSyncStatus('connected', 'Synced via GitHub'); else setSyncStatus('disconnected', 'Offline (local only)'); }
+function showToast(msg, type) { var t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast ' + (type || 'info') + ' show'; setTimeout(function() { t.classList.remove('show'); }, 3000); }
+
+function fetchGitHubState(callback) {
+    if (!ghConfig) { if(callback) callback(false); return; }
+    var url = 'https://api.github.com/repos/' + ghConfig.owner + '/' + ghConfig.repo + '/contents/data/state.json';
+    var xhr = new XMLHttpRequest(); xhr.open('GET', url, true);
+    xhr.setRequestHeader('Authorization', 'Bearer ' + ghConfig.token);
+    xhr.setRequestHeader('Accept', 'application/vnd.github.v3+json');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState !== 4) return;
+        if (xhr.status === 200) { try { var resp = JSON.parse(xhr.responseText); ghFileSHA = resp.sha; var content = atob(resp.content.replace(/\n/g, '')); applyRemoteState(JSON.parse(content)); if (callback) callback(true); } catch(e) { if (callback) callback(false); } }
+        else if (xhr.status === 404) { ghFileSHA = null; pushStateToGitHub(function(ok) { if (callback) callback(ok); }); }
+        else { if (callback) callback(false); }
+    };
+    xhr.send();
+}
+
+function pushStateToGitHub(callback) {
+    if (!ghConfig) { if(callback) callback(false); return; }
+    setSyncStatus('syncing', 'Saving...');
+    var data = buildStatePayload();
+    var content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+    var url = 'https://api.github.com/repos/' + ghConfig.owner + '/' + ghConfig.repo + '/contents/data/state.json';
+    var body = { message: 'Portal update: ' + new Date().toISOString().slice(0, 16).replace('T', ' '), content: content };
+    if (ghFileSHA) body.sha = ghFileSHA;
+    var xhr = new XMLHttpRequest(); xhr.open('PUT', url, true);
+    xhr.setRequestHeader('Authorization', 'Bearer ' + ghConfig.token);
+    xhr.setRequestHeader('Accept', 'application/vnd.github.v3+json');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState !== 4) return;
+        if (xhr.status === 200 || xhr.status === 201) { try { ghFileSHA = JSON.parse(xhr.responseText).content.sha; document.getElementById('lastSaved').textContent = new Date().toLocaleString(); setSyncStatus('connected', 'Synced via GitHub'); if (callback) callback(true); } catch(e) { setSyncStatus('disconnected', 'Parse error'); if (callback) callback(false); } }
+        else if (xhr.status === 409) { fetchGitHubState(function(ok) { if (ok) renderAll(); if (callback) callback(ok); }); }
+        else { setSyncStatus('disconnected', 'Save failed'); showToast('Failed to save to GitHub.', 'error'); if (callback) callback(false); }
+    };
+    xhr.send(JSON.stringify(body));
+}
+
+function buildStatePayload() {
+    return {
+        tasks: state.tasks.map(function(t) { return { id: t.id, status: t.status, chk: t.chk }; }),
+        deliverables: state.deliverables.map(function(d) { return { id: d.id, status: d.status, progress: d.progress }; }),
+        actions: state.actions.map(function(a, i) { return { idx: i, status: a.status }; }),
+        savedAt: new Date().toISOString(), savedBy: 'portal'
+    };
+}
+
+function applyRemoteState(data) {
+    if (data.tasks) data.tasks.forEach(function(st) { var t = state.tasks.find(function(x) { return x.id === st.id; }); if (t) { t.status = st.status; t.chk = st.chk; } });
+    if (data.deliverables) data.deliverables.forEach(function(sd) { var d = state.deliverables.find(function(x) { return x.id === sd.id; }); if (d) { d.status = sd.status; d.progress = sd.progress; } });
+    if (data.actions) data.actions.forEach(function(sa) { if (state.actions[sa.idx]) state.actions[sa.idx].status = sa.status; });
+    if (data.savedAt) document.getElementById('lastSaved').textContent = new Date(data.savedAt).toLocaleString();
+    saveLocalState();
+}
+
+function syncFromGitHub() {
+    if (syncMode !== 'github') { showToast('Not connected to GitHub. Click the gear icon to set up.', 'info'); return; }
+    setSyncStatus('syncing', 'Refreshing...');
+    fetchGitHubState(function(ok) { if (ok) { renderAll(); showToast('Refreshed from GitHub.', 'success'); setSyncStatus('connected', 'Synced via GitHub'); } else { showToast('Failed to refresh.', 'error'); setSyncStatus('disconnected', 'Refresh failed'); } });
+}
+
+function saveAndSync() {
+    saveLocalState();
+    if (syncMode === 'github') { pushStateToGitHub(function(ok) { if (ok) showToast('Saved and synced to GitHub!', 'success'); }); }
+    else { document.getElementById('lastSaved').textContent = new Date().toLocaleString(); showToast('Saved locally. Connect to GitHub to share with team.', 'info'); }
+}
+
+// ═══════════════════════════════════════
+// LOCAL STATE
+// ═══════════════════════════════════════
+var state = { tasks: JSON.parse(JSON.stringify(TASKS)), deliverables: JSON.parse(JSON.stringify(DELIVERABLES)), actions: JSON.parse(JSON.stringify(ACTIONS)) };
+var taskFilter = 'all', ganttFilter = 'all', actionFilter = 'all';
+var taskSortCol = 'id', taskSortDir = 'asc';
+
+function loadLocalState() {
+    try {
+        var s = JSON.parse(localStorage.getItem('tssa_portal_v1') || 'null');
+        if (s) {
+            if (s.tasks) s.tasks.forEach(function(st) { var t = state.tasks.find(function(x){return x.id===st.id}); if(t){t.status=st.status;t.chk=st.chk;} });
+            if (s.deliverables) s.deliverables.forEach(function(sd) { var d = state.deliverables.find(function(x){return x.id===sd.id}); if(d){d.status=sd.status;d.progress=sd.progress;} });
+            if (s.actions) s.actions.forEach(function(sa) { if(state.actions[sa.idx]) state.actions[sa.idx].status=sa.status; });
+            if (s.savedAt) document.getElementById('lastSaved').textContent = new Date(s.savedAt).toLocaleString();
+        }
+    } catch(e){}
+}
+
+function saveLocalState() { try { localStorage.setItem('tssa_portal_v1', JSON.stringify(buildStatePayload())); } catch(e){} }
+
+// ═══════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════
+function countStatus(s) { return state.tasks.filter(function(t){return t.status===s}).length; }
+function phaseLabel(p) { return {p1:'Phase 1',p2:'Phase 2',p3:'Phase 3',p4:'Phase 4',p5:'Phase 5',pm:'PM & Gov'}[p]||p; }
+function phaseColorHex(p) { return {p1:'#3b82f6',p2:'#6366f1',p3:'#f59e0b',p4:'#22c55e',p5:'#F12300',pm:'#94a3b8'}[p]||'#94a3b8'; }
+function statusLabel(s) { return {complete:'Completed','in-progress':'In Progress','not-started':'Not Started',blocked:'Blocked',ongoing:'Ongoing','at-risk':'At Risk'}[s]||s; }
+function daysBetween(a,b) { return Math.ceil((new Date(b)-new Date(a))/(86400000)); }
+
+function getPhaseProgress(pid) {
+    var pts = state.tasks.filter(function(t){return t.phase===pid});
+    if(!pts.length) return 0;
+    var done = pts.filter(function(t){return t.status==='complete'}).length;
+    var ip = pts.filter(function(t){return t.status==='in-progress'||t.status==='ongoing'}).length;
+    return Math.round((done*100 + ip*50)/pts.length);
+}
+
+// ═══════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════
+var tabList = ['overview','tasks','gantt','deliverables','actions','risks','raci','comms'];
+var tabLabels = ['Overview','Task Tracker','Gantt View','Deliverables','Action Items','Risks & Deps','RACI','Comms Plan'];
+
+function renderTabs() {
+    document.getElementById('tabBar').innerHTML = tabList.map(function(t,i){
+        return '<button class="tab'+(i===0?' active':'')+'" onclick="switchTab(\''+t+'\',this)">'+tabLabels[i]+'</button>';
+    }).join('');
+}
+
+function switchTab(name, el) {
+    document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+    document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});
+    document.getElementById('tab-'+name).classList.add('active');
+    if(el) el.classList.add('active');
+}
+
+// ═══════════════════════════════════════
+// RENDER ALL
+// ═══════════════════════════════════════
+function renderAll() { renderKPIs(); renderPhaseProgress(); renderPhaseChart(); renderDelivChart(); renderMilestones(); renderProjectInfo(); renderTasks(); renderGantt(); renderDeliverables(); renderActions(); renderRisks(); renderDeps(); renderRACI(); renderComms(); renderContacts(); saveLocalState(); }
+
+// ═══════════════════════════════════════
+// KPIs
+// ═══════════════════════════════════════
+function renderKPIs() {
+    var total = state.tasks.length, done = countStatus('complete'), ip = countStatus('in-progress'), ong = countStatus('ongoing');
+    var pct = total > 0 ? Math.round((done*100 + (ip+ong)*50) / total) : 0;
+    var dDone = state.deliverables.filter(function(d){return d.status==='completed'}).length;
+    var daysLeft = daysBetween(new Date().toISOString().slice(0,10),'2026-05-30');
+    document.getElementById('kpiRow').innerHTML =
+        '<div class="kpi blue"><div class="kpi-label">Total Tasks</div><div class="kpi-value">'+total+'</div><div class="kpi-sub">Across 5 phases + PM</div></div>' +
+        '<div class="kpi green"><div class="kpi-label">Completed</div><div class="kpi-value">'+done+'</div><div class="kpi-sub">'+Math.round(done/total*100)+'% of all tasks</div></div>' +
+        '<div class="kpi yellow"><div class="kpi-label">In Progress</div><div class="kpi-value">'+(ip+ong)+'</div><div class="kpi-sub">'+ip+' active, '+ong+' ongoing</div></div>' +
+        '<div class="kpi red"><div class="kpi-label">Overall Progress</div><div class="kpi-value">'+pct+'%</div><div class="kpi-sub">'+daysLeft+' days remaining \u2022 Target: May 30</div></div>';
+}
+
+// ═══════════════════════════════════════
+// PHASE PROGRESS
+// ═══════════════════════════════════════
+function renderPhaseProgress() {
+    var html = '';
+    PHASES.forEach(function(p) {
+        var pct = getPhaseProgress(p.id);
+        html += '<div class="phase-row"><div class="phase-label">'+p.name+'</div><div class="phase-bar-wrap"><div class="phase-bar '+p.color+'" style="width:'+Math.max(pct,3)+'%">'+pct+'%</div></div><div class="phase-dates">'+p.dates+'</div></div>';
+    });
+    var pmPct = getPhaseProgress('pm');
+    html += '<div class="phase-row"><div class="phase-label">PM & Governance</div><div class="phase-bar-wrap"><div class="phase-bar pm" style="width:'+Math.max(pmPct,3)+'%">'+pmPct+'%</div></div><div class="phase-dates">Apr 7 \u2013 May 30</div></div>';
+    document.getElementById('phaseProgress').innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+// PHASE BAR CHART
+// ═══════════════════════════════════════
+function renderPhaseChart() {
+    var phases = ['p1','p2','p3','p4','p5','pm'];
+    var labels = ['P1','P2','P3','P4','P5','PM'];
+    var maxT = Math.max.apply(null, phases.map(function(p){return state.tasks.filter(function(t){return t.phase===p}).length})) || 1;
+
+    var html = '<div class="css-chart">';
+    phases.forEach(function(p) {
+        var pts = state.tasks.filter(function(t){return t.phase===p});
+        var done = pts.filter(function(t){return t.status==='complete'}).length;
+        var ip = pts.filter(function(t){return t.status==='in-progress'||t.status==='ongoing'}).length;
+        var rest = pts.length - done - ip;
+        html += '<div class="css-bar-group"><div class="css-bar" style="width:18px;height:'+Math.max(done/maxT*180,2)+'px;background:var(--green)" title="Completed: '+done+'"><div class="css-bar-val" style="color:var(--green)">'+done+'</div></div><div class="css-bar" style="width:18px;height:'+Math.max(ip/maxT*180,2)+'px;background:var(--blue)" title="In Progress: '+ip+'"><div class="css-bar-val" style="color:var(--blue)">'+ip+'</div></div><div class="css-bar" style="width:18px;height:'+Math.max(rest/maxT*180,2)+'px;background:#e2e8f0" title="Remaining: '+rest+'"><div class="css-bar-val" style="color:var(--gray)">'+rest+'</div></div></div>';
+    });
+    html += '</div>';
+    html += '<div style="display:flex;justify-content:space-around">' + labels.map(function(l){return '<div class="css-bar-label">'+l+'</div>'}).join('') + '</div>';
+    html += '<div class="chart-legend"><div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Completed</div><div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>In Progress</div><div class="legend-item"><div class="legend-dot" style="background:#e2e8f0"></div>Remaining</div></div>';
+    document.getElementById('phaseChart').innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+// DONUT CHART
+// ═══════════════════════════════════════
+function renderDelivChart() {
+    var counts = {ns: state.deliverables.filter(function(d){return d.status==='not-started'}).length, ip: state.deliverables.filter(function(d){return d.status==='in-progress'}).length, done: state.deliverables.filter(function(d){return d.status==='completed'}).length, bl: state.deliverables.filter(function(d){return d.status==='blocked'}).length};
+    var total = state.deliverables.length;
+    var pNs = counts.ns/total*100, pIp = counts.ip/total*100, pDone = counts.done/total*100;
+    var g = 'conic-gradient(#e2e8f0 0% '+pNs+'%, var(--blue) '+pNs+'% '+(pNs+pIp)+'%, var(--green) '+(pNs+pIp)+'% '+(pNs+pIp+pDone)+'%, var(--red) '+(pNs+pIp+pDone)+'% 100%)';
+    document.getElementById('delivChart').innerHTML =
+        '<div class="donut-wrap"><div class="donut" style="background:'+g+'"><div class="donut-hole"><div class="big">'+counts.done+'</div><div class="small">of '+total+' done</div></div></div>' +
+        '<div class="donut-legend"><div class="donut-legend-row"><div class="donut-legend-dot" style="background:#e2e8f0"></div><span class="donut-legend-label">Not Started</span><span class="donut-legend-val">'+counts.ns+'</span></div><div class="donut-legend-row"><div class="donut-legend-dot" style="background:var(--blue)"></div><span class="donut-legend-label">In Progress</span><span class="donut-legend-val">'+counts.ip+'</span></div><div class="donut-legend-row"><div class="donut-legend-dot" style="background:var(--green)"></div><span class="donut-legend-label">Completed</span><span class="donut-legend-val">'+counts.done+'</span></div><div class="donut-legend-row"><div class="donut-legend-dot" style="background:var(--red)"></div><span class="donut-legend-label">Blocked</span><span class="donut-legend-val">'+counts.bl+'</span></div></div></div>';
+}
+
+function renderMilestones() {
+    document.getElementById('milestones').innerHTML = MILESTONES.map(function(m){
+        var isGate = m.name.indexOf('FINAL')>-1;
+        var color = m.done?'var(--green)':m.active?'var(--blue)':isGate?'var(--vermilion)':'#cbd5e1';
+        return '<div class="milestone-row"><div class="ms-date">'+m.date+'</div><div class="ms-dot" style="background:'+color+'"></div><div class="ms-name" style="font-weight:'+(isGate?'700':'500')+';color:'+(isGate?'var(--vermilion)':m.done?'var(--green)':'var(--text)')+'">'+m.name+'</div></div>';
+    }).join('');
+}
+
+function renderProjectInfo() {
+    var info = [['Project ID','BITPT-264'],['Client','Technical Standards & Safety Authority (TSSA)'],['Partner','CDW Canada Corp.'],['Delivery Partner','BITSUMMIT'],['Project Manager','Rejaa Khalid'],['Technical Lead','Amitosh'],['Engagement Delivery Lead','Hassan Abidi'],['SOW Effective Date','December 10, 2025'],['Project Start','April 1, 2026'],['Target Completion','May 30, 2026'],['Engagement Model','Fixed Price']];
+    document.getElementById('projectInfo').innerHTML = '<table class="info-table">' + info.map(function(r){return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>'}).join('') + '</table>';
+}
+
+// ═══════════════════════════════════════
+// TASK TRACKER
+// ═══════════════════════════════════════
+function renderTasks() {
+    var filtered = state.tasks.slice();
+    if (taskFilter !== 'all') {
+        if (['p1','p2','p3','p4','p5','pm'].indexOf(taskFilter) > -1) filtered = filtered.filter(function(t){return t.phase===taskFilter});
+        else if (taskFilter === 'critical') filtered = filtered.filter(function(t){return t.pri==='critical'});
+        else filtered = filtered.filter(function(t){return t.status===taskFilter});
+    }
+    filtered.sort(function(a,b) {
+        var va = a[taskSortCol]||'', vb = b[taskSortCol]||'';
+        if (taskSortCol==='id') { va=parseInt(va.replace('T','')); vb=parseInt(vb.replace('T','')); }
+        if (taskSortCol==='pri') { var po={critical:0,high:1,medium:2,low:3}; va=po[va]||4; vb=po[vb]||4; }
+        return (va<vb?-1:va>vb?1:0) * (taskSortDir==='asc'?1:-1);
+    });
+    document.getElementById('taskCount').textContent = filtered.length + ' tasks';
+    document.getElementById('taskBody').innerHTML = filtered.map(function(t){
+        var bgC = phaseColorHex(t.phase);
+        return '<tr class="'+(t.status==='complete'?'completed-row':'')+'"><td><div class="check-toggle '+(t.chk?'checked':'')+'" onclick="toggleCheck(\''+t.id+'\')"></div></td><td style="font-weight:700;font-size:12px;color:var(--vermilion)">'+t.id+'</td><td style="font-weight:500;max-width:350px">'+t.desc+'</td><td><span class="phase-tag" style="background:'+bgC+'20;color:'+bgC+'">'+phaseLabel(t.phase)+'</span></td><td><div class="owner"><div class="owner-avatar '+t.oc+'">'+t.oc.toUpperCase()+'</div>'+t.owner+'</div></td><td><span class="priority '+t.pri+'">'+t.pri.toUpperCase()+'</span></td><td style="font-size:12px;white-space:nowrap">'+t.start.replace('2026-','')+'</td><td style="font-size:12px;white-space:nowrap">'+t.end.replace('2026-','')+'</td><td><select class="status-select" onchange="updateTaskStatus(\''+t.id+'\',this.value)"><option value="not-started"'+(t.status==='not-started'?' selected':'')+'>Not Started</option><option value="in-progress"'+(t.status==='in-progress'?' selected':'')+'>In Progress</option><option value="complete"'+(t.status==='complete'?' selected':'')+'>Completed</option><option value="blocked"'+(t.status==='blocked'?' selected':'')+'>Blocked</option><option value="at-risk"'+(t.status==='at-risk'?' selected':'')+'>At Risk</option><option value="ongoing"'+(t.status==='ongoing'?' selected':'')+'>Ongoing</option></select></td></tr>';
+    }).join('');
+
+    var filters = [{l:'All',v:'all'},{l:'Critical',v:'critical',cls:'critical-btn'},{l:'In Progress',v:'in-progress'},{l:'Blocked',v:'blocked'},{l:'P1',v:'p1'},{l:'P2',v:'p2'},{l:'P3',v:'p3'},{l:'P4',v:'p4'},{l:'P5',v:'p5'},{l:'PM',v:'pm'}];
+    document.getElementById('taskFilters').innerHTML = filters.map(function(f){
+        return '<button class="task-filter-btn '+(f.cls||'')+' '+(taskFilter===f.v?'active':'')+'" onclick="setTaskFilter(\''+f.v+'\')">'+f.l+'</button>';
+    }).join('');
+}
+
+// ═══════════════════════════════════════
+// GANTT
+// ═══════════════════════════════════════
+function renderGantt() {
+    var totalDays = daysBetween('2026-04-01','2026-05-31');
+    var filtered = state.tasks.slice();
+    if (ganttFilter !== 'all') filtered = filtered.filter(function(t){return t.phase===ganttFilter});
+
+    var html = '';
+    // Week headers
+    html += '<div class="gantt-week-header"><div class="gantt-label" style="font-weight:700;color:var(--text-sec)"></div><div class="gantt-track" style="background:transparent;display:flex">';
+    var ws = new Date('2026-04-01');
+    var months = ['Jan','Feb','Mar','Apr','May','Jun'];
+    while (ws < new Date('2026-05-31')) { html += '<div class="gantt-week-label">'+months[ws.getMonth()]+' '+ws.getDate()+'</div>'; ws.setDate(ws.getDate()+7); }
+    html += '</div></div>';
+
+    // Group by phase
+    var currentPhase = '';
+    filtered.forEach(function(t) {
+        if (t.phase !== currentPhase) {
+            currentPhase = t.phase;
+            html += '<div class="gantt-row" style="margin-top:8px"><div class="gantt-label" style="font-weight:800;color:'+phaseColorHex(t.phase)+'">'+phaseLabel(t.phase)+'</div><div class="gantt-track" style="background:transparent"></div></div>';
+        }
+        var startOff = Math.max(0, daysBetween('2026-04-01', t.start));
+        var dur = daysBetween(t.start, t.end) + 1;
+        var leftPct = (startOff/totalDays*100).toFixed(1);
+        var widthPct = (dur/totalDays*100).toFixed(1);
+        html += '<div class="gantt-row"><div class="gantt-label" title="'+t.desc+'">'+t.id+' '+t.desc.substring(0,28)+(t.desc.length>28?'...':'')+'</div><div class="gantt-track"><div class="gantt-bar '+t.status+'" style="left:'+leftPct+'%;width:'+widthPct+'%" title="'+t.desc+' ('+t.start+' \u2192 '+t.end+')">'+t.id+'</div></div></div>';
+    });
+
+    document.getElementById('ganttChart').innerHTML = html;
+
+    // Gantt filters
+    var gFilters = [{l:'All',v:'all'},{l:'P1',v:'p1'},{l:'P2',v:'p2'},{l:'P3',v:'p3'},{l:'P4',v:'p4'},{l:'P5',v:'p5'},{l:'PM',v:'pm'}];
+    document.getElementById('ganttFilters').innerHTML = gFilters.map(function(f){
+        return '<button class="task-filter-btn '+(ganttFilter===f.v?'active':'')+'" onclick="ganttFilter=\''+f.v+'\';renderGantt()">'+f.l+'</button>';
+    }).join('');
+}
+
+// ═══════════════════════════════════════
+// DELIVERABLES
+// ═══════════════════════════════════════
+function renderDeliverables() {
+    document.getElementById('delivBody').innerHTML = state.deliverables.map(function(d){
+        var barColor = d.progress>=100?'var(--green)':d.progress>50?'var(--blue)':d.progress>0?'var(--yellow)':'#e2e8f0';
+        return '<tr><td style="font-weight:700;color:var(--vermilion)">'+d.id+'</td><td style="font-weight:600">'+d.name+'</td><td><div class="owner"><div class="owner-avatar '+d.oc+'">'+d.oc.toUpperCase()+'</div>'+d.owner+'</div></td><td><span class="phase-tag" style="background:'+phaseColorHex(d.phase)+'20;color:'+phaseColorHex(d.phase)+'">'+phaseLabel(d.phase)+'</span></td><td style="white-space:nowrap">'+d.target+'</td><td style="width:160px"><div class="prog-bar-wrap"><div class="prog-bar-track"><div class="prog-bar-fill" style="width:'+d.progress+'%;background:'+barColor+'"></div></div><input type="number" class="prog-input" min="0" max="100" value="'+d.progress+'" onchange="updateDelivProgress(\''+d.id+'\',this.value)">%</div></td><td><select class="status-select" onchange="updateDelivStatus(\''+d.id+'\',this.value)"><option value="not-started"'+(d.status==='not-started'?' selected':'')+'>Not Started</option><option value="in-progress"'+(d.status==='in-progress'?' selected':'')+'>In Progress</option><option value="completed"'+(d.status==='completed'?' selected':'')+'>Completed</option><option value="blocked"'+(d.status==='blocked'?' selected':'')+'>Blocked</option></select></td></tr>';
+    }).join('');
+}
+
+// ═══════════════════════════════════════
+// ACTION ITEMS
+// ═══════════════════════════════════════
+function renderActions() {
+    var filtered = state.actions.slice();
+    var aIdx = state.actions.map(function(a,i){return {a:a,i:i}});
+    if (actionFilter !== 'all') aIdx = aIdx.filter(function(x){return x.a.status===actionFilter});
+    document.getElementById('actionCount').textContent = aIdx.length + ' items';
+
+    document.getElementById('actionList').innerHTML = aIdx.map(function(x){
+        var a = x.a, i = x.i;
+        var stBg = a.status==='complete'?'#dcfce7':a.status==='in-progress'?'#dbeafe':'#f1f5f9';
+        var stColor = a.status==='complete'?'#15803d':a.status==='in-progress'?'#1d4ed8':'#64748b';
+        return '<div class="action-row"><div class="owner" style="min-width:140px"><div class="owner-avatar '+a.oc+'">'+a.oc.toUpperCase()+'</div>'+a.owner+'</div><div style="flex:1;font-size:13px">'+a.desc+'</div><div style="min-width:140px;text-align:right;font-size:12px;color:var(--text-sec)">'+a.due+'</div><div style="min-width:120px"><select class="status-select" onchange="updateActionStatus('+i+',this.value)"><option value="not-started"'+(a.status==='not-started'?' selected':'')+'>Not Started</option><option value="in-progress"'+(a.status==='in-progress'?' selected':'')+'>In Progress</option><option value="complete"'+(a.status==='complete'?' selected':'')+'>Complete</option></select></div></div>';
+    }).join('');
+
+    var aFilters = [{l:'All',v:'all'},{l:'Complete',v:'complete'},{l:'In Progress',v:'in-progress'},{l:'Not Started',v:'not-started'}];
+    document.getElementById('actionFilters').innerHTML = aFilters.map(function(f){
+        return '<button class="task-filter-btn '+(actionFilter===f.v?'active':'')+'" onclick="actionFilter=\''+f.v+'\';renderActions()">'+f.l+'</button>';
+    }).join('');
+}
+
+// ═══════════════════════════════════════
+// RISKS & DEPS
+// ═══════════════════════════════════════
+function renderRisks() {
+    document.getElementById('riskList').innerHTML = RISKS.map(function(r){
+        return '<div class="risk-row"><div class="risk-severity '+r.sev+'"></div><div class="risk-info"><div class="risk-name">'+r.id+': '+r.name+'</div><div class="risk-detail">'+r.detail+'</div><div style="font-size:11px;color:var(--text-sec);margin-top:2px"><strong>Mitigation:</strong> '+r.mitigation+'</div></div><div class="risk-badge" style="background:'+(r.sev==='high'?'#fee2e2':'#fef9c3')+';color:'+(r.sev==='high'?'#dc2626':'#ca8a04')+'">'+r.sev.toUpperCase()+'</div></div>';
+    }).join('');
+}
+
+function renderDeps() {
+    document.getElementById('depList').innerHTML = DEPS.map(function(d){
+        return '<div class="dep-flow"><div class="dep-node" style="background:'+d.c+'20;color:'+d.c+';border:1px solid '+d.c+'40">'+d.from+'</div><div class="dep-arrow">\u2192</div><div class="dep-node" style="background:'+d.c+'20;color:'+d.c+';border:1px solid '+d.c+'40">'+d.to+'</div></div>';
+    }).join('');
+}
+
+// ═══════════════════════════════════════
+// RACI
+// ═══════════════════════════════════════
+function renderRACI() {
+    var html = '<table class="raci-table"><thead><tr><th style="text-align:left">Activity / Deliverable</th><th>Rejaa (PM)</th><th>Amitosh (TL)</th><th>Hassan (EDL)</th><th>Rizgar</th><th>Khalid</th><th>Sutharsan</th><th>Mandeep</th></tr></thead><tbody>';
+    RACI_DATA.forEach(function(r){
+        html += '<tr><td>'+r.a+'</td>';
+        ['rj','am','ha','rz','kh','su','md'].forEach(function(k){
+            var v = r[k]; html += '<td>'+(v?'<span class="raci-cell '+v+'">'+v+'</span>':'\u2014')+'</td>';
+        });
+        html += '</tr>';
+    });
+    html += '</tbody></table>';
+    document.getElementById('raciTable').innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+// COMMS & CONTACTS
+// ═══════════════════════════════════════
+function renderComms() {
+    var html = '<div class="comm-row"><div>Communication</div><div>Frequency / Format</div><div>Participants</div><div>Owner</div></div>';
+    COMMS.forEach(function(c){ html += '<div class="comm-row"><div style="font-weight:600;color:var(--dark-blue)">'+c.type+'</div><div>'+c.freq+'</div><div>'+c.who+'</div><div style="color:var(--vermilion);font-weight:600">'+c.owner+'</div></div>'; });
+    document.getElementById('commsTable').innerHTML = html;
+}
+
+function renderContacts() {
+    document.getElementById('contactCards').innerHTML = CONTACTS.map(function(c){
+        return '<div class="contact-card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="owner-avatar '+c.oc+'" style="width:32px;height:32px;font-size:12px">'+c.oc.toUpperCase()+'</div><div><div style="font-weight:700;color:var(--dark-blue)">'+c.name+'</div><div style="font-size:12px;color:var(--text-sec)">'+c.role+'</div></div></div><div style="font-size:12px;color:var(--vermilion);font-weight:600">'+c.org+'</div></div>';
+    }).join('');
+}
+
+// ═══════════════════════════════════════
+// INTERACTIONS
+// ═══════════════════════════════════════
+function toggleCheck(id) { var t = state.tasks.find(function(x){return x.id===id}); if(t){t.chk=!t.chk;if(t.chk&&t.status!=='complete'){t.status='complete'}if(!t.chk&&t.status==='complete'){t.status='not-started'} renderAll();} }
+function updateTaskStatus(id, val) { var t = state.tasks.find(function(x){return x.id===id}); if(t){t.status=val;t.chk=val==='complete';renderAll();showToast(id+' \u2192 '+statusLabel(val),'success')} }
+function updateDelivStatus(id, val) { var d = state.deliverables.find(function(x){return x.id===id}); if(d){d.status=val;if(val==='completed')d.progress=100;renderAll();} }
+function updateDelivProgress(id, val) { var d = state.deliverables.find(function(x){return x.id===id}); if(d){d.progress=Math.min(100,Math.max(0,parseInt(val)||0));renderAll();} }
+function updateActionStatus(idx, val) { state.actions[idx].status = val; renderAll(); showToast('Action item updated','success'); }
+function setTaskFilter(val) { taskFilter=val; renderTasks(); }
+function sortTasks(col) { if(taskSortCol===col) taskSortDir=taskSortDir==='asc'?'desc':'asc'; else{taskSortCol=col;taskSortDir='asc';} renderTasks(); }
+
+// ═══════════════════════════════════════
+// EXCEL EXPORT (styled like SLS)
+// ═══════════════════════════════════════
+function exportExcel() {
+    var wb = XLSX.utils.book_new();
+    var darkBlue='001E35',vermilion='F12300',white='FFFFFF',lightGray='F4F6F9',green='22C55E',yellow='F59E0B',blue='3B82F6',red='EF4444',gray='94A3B8',textDark='1A1A2E';
+
+    function statusColor(s){if(s==='complete'||s==='completed')return green;if(s==='in-progress')return blue;if(s==='blocked')return red;if(s==='ongoing')return yellow;return gray;}
+    function priColor(p){if(p==='critical')return red;if(p==='high')return yellow;if(p==='medium')return blue;return gray;}
+    function hs(){return{font:{bold:true,color:{rgb:white},sz:12},fill:{fgColor:{rgb:darkBlue}},alignment:{horizontal:'center',vertical:'center'},border:{bottom:{style:'thin',color:{rgb:vermilion}}}};}
+    function cs(bg){return{font:{color:{rgb:textDark},sz:11},fill:{fgColor:{rgb:bg||white}},alignment:{vertical:'center',wrapText:true},border:{bottom:{style:'thin',color:{rgb:'E2E8F0'}}}};}
+    function sc(val){var label=statusLabel(val);return{v:label,s:{font:{bold:true,color:{rgb:white},sz:11},fill:{fgColor:{rgb:statusColor(val)}},alignment:{horizontal:'center',vertical:'center'}}};}
+
+    // Summary
+    var total=state.tasks.length,done=countStatus('complete'),ip=countStatus('in-progress'),ong=countStatus('ongoing');
+    var pct=Math.round((done*100+(ip+ong)*50)/total);
+    var sumData=[
+        [{v:'BITSUMMIT \u2014 TSSA-Intune Mobile Environment Build & Nuclear Inspector Pilot Deployment',s:{font:{bold:true,color:{rgb:white},sz:16},fill:{fgColor:{rgb:darkBlue}},alignment:{horizontal:'center'}}}],
+        [{v:'BITPT 264 \u2022 CDW Canada Corp. \u2192 Technical Standards & Safety Authority (TSSA)',s:{font:{color:{rgb:white},sz:11},fill:{fgColor:{rgb:darkBlue}},alignment:{horizontal:'center'}}}],
+        [{v:'Export: '+new Date().toLocaleString(),s:{font:{color:{rgb:white},sz:10,italic:true},fill:{fgColor:{rgb:darkBlue}},alignment:{horizontal:'center'}}}],
+        [],
+        [{v:'Metric',s:hs()},{v:'Value',s:hs()}],
+        [{v:'Total Tasks',s:cs(lightGray)},{v:total,s:cs(lightGray)}],
+        [{v:'Completed',s:cs()},{v:done,s:{font:{bold:true,color:{rgb:green},sz:12}}}],
+        [{v:'In Progress',s:cs(lightGray)},{v:ip+ong,s:{font:{bold:true,color:{rgb:blue},sz:12},fill:{fgColor:{rgb:lightGray}}}}],
+        [{v:'Overall Progress',s:cs()},{v:pct+'%',s:{font:{bold:true,color:{rgb:vermilion},sz:14}}}],
+        [],
+        [{v:'Phase',s:hs()},{v:'Progress',s:hs()}]
+    ];
+    PHASES.forEach(function(p){sumData.push([{v:p.name,s:cs()},{v:getPhaseProgress(p.id)+'%',s:cs()}])});
+    sumData.push([{v:'PM & Governance',s:cs(lightGray)},{v:getPhaseProgress('pm')+'%',s:cs(lightGray)}]);
+    var ws1=XLSX.utils.aoa_to_sheet(sumData);ws1['!merges']=[{s:{r:0,c:0},e:{r:0,c:2}},{s:{r:1,c:0},e:{r:1,c:2}},{s:{r:2,c:0},e:{r:2,c:2}}];ws1['!cols']=[{wch:50},{wch:15},{wch:15}];
+    XLSX.utils.book_append_sheet(wb,ws1,'Summary');
+
+    // Tasks
+    var tRows=[[{v:'ID',s:hs()},{v:'Task',s:hs()},{v:'Phase',s:hs()},{v:'Owner',s:hs()},{v:'Priority',s:hs()},{v:'Start',s:hs()},{v:'End',s:hs()},{v:'Status',s:hs()},{v:'Done',s:hs()}]];
+    state.tasks.forEach(function(t,i){var bg=i%2===0?white:lightGray;tRows.push([{v:t.id,s:{font:{bold:true,color:{rgb:vermilion},sz:11},fill:{fgColor:{rgb:bg}},alignment:{horizontal:'center'}}},{v:t.desc,s:cs(bg)},{v:phaseLabel(t.phase),s:cs(bg)},{v:t.owner,s:cs(bg)},{v:t.pri.charAt(0).toUpperCase()+t.pri.slice(1),s:{font:{bold:true,color:{rgb:priColor(t.pri)},sz:11},fill:{fgColor:{rgb:bg}},alignment:{horizontal:'center'}}},{v:t.start,s:cs(bg)},{v:t.end,s:cs(bg)},sc(t.status),{v:t.chk?'\u2713':'',s:{font:{sz:14,color:{rgb:t.chk?green:gray}},fill:{fgColor:{rgb:bg}},alignment:{horizontal:'center'}}}])});
+    var ws2=XLSX.utils.aoa_to_sheet(tRows);ws2['!cols']=[{wch:6},{wch:55},{wch:12},{wch:22},{wch:10},{wch:12},{wch:12},{wch:14},{wch:6}];
+    XLSX.utils.book_append_sheet(wb,ws2,'Tasks');
+
+    // Deliverables
+    var dRows=[[{v:'ID',s:hs()},{v:'Deliverable',s:hs()},{v:'Owner',s:hs()},{v:'Phase',s:hs()},{v:'Target',s:hs()},{v:'Progress',s:hs()},{v:'Status',s:hs()}]];
+    state.deliverables.forEach(function(d,i){var bg=i%2===0?white:lightGray;dRows.push([{v:d.id,s:{font:{bold:true,color:{rgb:vermilion},sz:11},fill:{fgColor:{rgb:bg}},alignment:{horizontal:'center'}}},{v:d.name,s:cs(bg)},{v:d.owner,s:cs(bg)},{v:phaseLabel(d.phase),s:cs(bg)},{v:d.target,s:cs(bg)},{v:d.progress+'%',s:{font:{bold:true,color:{rgb:d.progress>=100?green:d.progress>0?blue:gray},sz:11},fill:{fgColor:{rgb:bg}},alignment:{horizontal:'center'}}},sc(d.status)])});
+    var ws3=XLSX.utils.aoa_to_sheet(dRows);ws3['!cols']=[{wch:6},{wch:50},{wch:20},{wch:10},{wch:16},{wch:10},{wch:14}];
+    XLSX.utils.book_append_sheet(wb,ws3,'Deliverables');
+
+    // Action Items
+    var aiRows=[[{v:'Owner',s:hs()},{v:'Action Item',s:hs()},{v:'Due',s:hs()},{v:'Status',s:hs()}]];
+    state.actions.forEach(function(a,i){var bg=i%2===0?white:lightGray;aiRows.push([{v:a.owner,s:{font:{bold:true,sz:11},fill:{fgColor:{rgb:bg}}}},{v:a.desc,s:cs(bg)},{v:a.due,s:cs(bg)},sc(a.status)])});
+    var ws4=XLSX.utils.aoa_to_sheet(aiRows);ws4['!cols']=[{wch:20},{wch:70},{wch:22},{wch:14}];
+    XLSX.utils.book_append_sheet(wb,ws4,'Action Items');
+
+    // Risks
+    var rRows=[[{v:'ID',s:hs()},{v:'Risk',s:hs()},{v:'Detail',s:hs()},{v:'Severity',s:hs()},{v:'Mitigation',s:hs()},{v:'Owner',s:hs()}]];
+    RISKS.forEach(function(r,i){var bg=i%2===0?white:lightGray;var sevC=r.sev==='high'?red:r.sev==='medium'?yellow:green;rRows.push([{v:r.id,s:cs(bg)},{v:r.name,s:{font:{bold:true,sz:11},fill:{fgColor:{rgb:bg}}}},{v:r.detail,s:cs(bg)},{v:r.sev.toUpperCase(),s:{font:{bold:true,color:{rgb:sevC},sz:11},fill:{fgColor:{rgb:bg}},alignment:{horizontal:'center'}}},{v:r.mitigation,s:cs(bg)},{v:r.owner,s:cs(bg)}])});
+    var ws5=XLSX.utils.aoa_to_sheet(rRows);ws5['!cols']=[{wch:6},{wch:30},{wch:45},{wch:10},{wch:55},{wch:18}];
+    XLSX.utils.book_append_sheet(wb,ws5,'Risks');
+
+    XLSX.writeFile(wb,'TSSA_Intune_Pilot_Status_'+new Date().toISOString().slice(0,10)+'.xlsx');
+    hideExportModal();
+    showToast('Excel exported successfully!','success');
+}
+
+function exportHTML() {
+    var blob = new Blob([document.documentElement.outerHTML], {type:'text/html'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a'); a.href = url;
+    a.download = 'TSSA_Intune_Pilot_Portal_'+new Date().toISOString().slice(0,10)+'.html';
+    a.click(); URL.revokeObjectURL(url);
+    hideExportModal();
+    showToast('HTML dashboard downloaded!','success');
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+(function init() {
+    loadLocalState();
+    renderTabs();
+    renderAll();
+
+    ghConfig = getGHConfig();
+    if (ghConfig && ghConfig.token) {
+        syncMode = 'github';
+        setSyncStatus('syncing', 'Connecting...');
+        fetchGitHubState(function(ok) {
+            if (ok) { syncMode = 'github'; renderAll(); updateSyncUI(); }
+            else { syncMode = 'offline'; updateSyncUI(); showToast('Could not connect to GitHub. Working offline.', 'info'); }
+        });
+    } else {
+        showSetup();
+    }
+
+    setInterval(function() {
+        if (syncMode === 'github') { saveLocalState(); pushStateToGitHub(); }
+        else { saveLocalState(); }
+    }, 60000);
+})();
+</script>
+</body>
+</html>
