@@ -7,8 +7,8 @@
     },
     {
       "id": "T02",
-      "status": "not-started",
-      "chk": false
+      "status": "complete",
+      "chk": true
     },
     {
       "id": "T03",
@@ -301,6 +301,6 @@
       "status": "not-started"
     }
   ],
-  "savedAt": "2026-04-09T17:55:18.996Z",
+  "savedAt": "2026-04-09T17:55:36.868Z",
   "savedBy": "portal"
 }
