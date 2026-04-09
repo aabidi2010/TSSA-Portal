@@ -1,0 +1,306 @@
+{
+  "tasks": [
+    {
+      "id": "T01",
+      "status": "complete",
+      "chk": true
+    },
+    {
+      "id": "T02",
+      "status": "complete",
+      "chk": true
+    },
+    {
+      "id": "T03",
+      "status": "in-progress",
+      "chk": false
+    },
+    {
+      "id": "T04",
+      "status": "in-progress",
+      "chk": false
+    },
+    {
+      "id": "T05",
+      "status": "in-progress",
+      "chk": false
+    },
+    {
+      "id": "T06",
+      "status": "in-progress",
+      "chk": false
+    },
+    {
+      "id": "T07",
+      "status": "in-progress",
+      "chk": false
+    },
+    {
+      "id": "T08",
+      "status": "in-progress",
+      "chk": false
+    },
+    {
+      "id": "T09",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T10",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T11",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T12",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T13",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T14",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T15",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T16",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T17",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T18",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T19",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T20",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T21",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T22",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T23",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T24",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T25",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T26",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T27",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T28",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T29",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T30",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T31",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T32",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T33",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T34",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T35",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T36",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T37",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T38",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T39",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T40",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T41",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T42",
+      "status": "ongoing",
+      "chk": false
+    },
+    {
+      "id": "T43",
+      "status": "ongoing",
+      "chk": false
+    },
+    {
+      "id": "T44",
+      "status": "ongoing",
+      "chk": false
+    },
+    {
+      "id": "T45",
+      "status": "complete",
+      "chk": true
+    },
+    {
+      "id": "T46",
+      "status": "in-progress",
+      "chk": false
+    }
+  ],
+  "deliverables": [
+    {
+      "id": "D1",
+      "status": "not-started",
+      "progress": 0
+    },
+    {
+      "id": "D2",
+      "status": "not-started",
+      "progress": 0
+    },
+    {
+      "id": "D3",
+      "status": "not-started",
+      "progress": 0
+    },
+    {
+      "id": "D4",
+      "status": "not-started",
+      "progress": 0
+    },
+    {
+      "id": "D5",
+      "status": "not-started",
+      "progress": 0
+    },
+    {
+      "id": "D6",
+      "status": "not-started",
+      "progress": 0
+    }
+  ],
+  "actions": [
+    {
+      "idx": 0,
+      "status": "complete"
+    },
+    {
+      "idx": 1,
+      "status": "complete"
+    },
+    {
+      "idx": 2,
+      "status": "complete"
+    },
+    {
+      "idx": 3,
+      "status": "in-progress"
+    },
+    {
+      "idx": 4,
+      "status": "complete"
+    },
+    {
+      "idx": 5,
+      "status": "in-progress"
+    },
+    {
+      "idx": 6,
+      "status": "not-started"
+    },
+    {
+      "idx": 7,
+      "status": "in-progress"
+    },
+    {
+      "idx": 8,
+      "status": "not-started"
+    }
+  ],
+  "savedAt": "2026-04-09T17:52:32.337Z",
+  "savedBy": "portal"
+}
