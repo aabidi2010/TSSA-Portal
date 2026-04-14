@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BITSUMMIT — TSSA-Intune Mobile Environment Build & Nuclear Inspector Pilot Deployment</title>
+    <title>BITSUMMIT â TSSA-Intune Mobile Environment Build & Nuclear Inspector Pilot Deployment</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root {
@@ -308,7 +308,7 @@
         </div>
         <div class="export-option" onclick="exportHTML()">
             <div class="export-icon">&#x1F310;</div>
-            <div><div class="export-title">Download Dashboard (.html)</div><div class="export-desc">Self-contained file — share via email or open offline</div></div>
+            <div><div class="export-title">Download Dashboard (.html)</div><div class="export-desc">Self-contained file â share via email or open offline</div></div>
         </div>
         <button class="btn" style="background:#f1f5f9;color:var(--text);margin-top:12px" onclick="hideExportModal()">Close</button>
     </div>
@@ -320,7 +320,7 @@
 <div class="container">
     <div class="header">
         <div>
-            <h1><span>BITSUMMIT</span> — TSSA-Intune Mobile Environment Build &amp; Nuclear Inspector Pilot Deployment</h1>
+            <h1><span>BITSUMMIT</span> â TSSA-Intune Mobile Environment Build &amp; Nuclear Inspector Pilot Deployment</h1>
             <div class="header-meta">BITPT 264 &bull; CDW Canada Corp. &rarr; Technical Standards &amp; Safety Authority (TSSA)</div>
         </div>
         <div class="header-right">
@@ -377,12 +377,15 @@
                 <tbody id="taskBody"></tbody>
             </table>
             </div>
+            <div style="margin-top:12px;display:flex;justify-content:flex-end;">
+              <button onclick="showAddTaskModal()" style="background:#2563eb;color:#fff;border:none;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;">&#43; Add Task</button>
+            </div>
         </div>
     </div>
 
     <div class="tab-content" id="tab-gantt">
         <div class="section">
-            <div class="section-title">Gantt Chart — Project Timeline <span class="badge">Apr 1 &ndash; May 31</span></div>
+            <div class="section-title">Gantt Chart â Project Timeline <span class="badge">Apr 1 &ndash; May 31</span></div>
             <div class="task-filters" id="ganttFilters"></div>
             <div class="gantt-container" id="ganttChart"></div>
         </div>
@@ -405,13 +408,22 @@
             <div class="section-title">Open Logistics: Action Items <span class="badge" id="actionCount"></span></div>
             <div class="task-filters" id="actionFilters"></div>
             <div id="actionList"></div>
+            <div style="margin-top:12px;display:flex;justify-content:flex-end;">
+              <button onclick="showAddActionModal()" style="background:#2563eb;color:#fff;border:none;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;">&#43; Add Action Item</button>
+            </div>
         </div>
     </div>
 
     <div class="tab-content" id="tab-risks">
         <div class="two-col">
-            <div class="section"><div class="section-title">Risk Register</div><div id="riskList"></div></div>
-            <div class="section"><div class="section-title">Key Dependencies</div><div id="depList"></div></div>
+            <div class="section">
+              <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">Risk Register <button onclick="showAddRiskModal()" style="background:#2563eb;color:#fff;border:none;padding:5px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;">&#43; Add Risk</button></div>
+              <div id="riskList"></div>
+            </div>
+            <div class="section">
+              <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">Key Dependencies <button onclick="showAddDepModal()" style="background:#2563eb;color:#fff;border:none;padding:5px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;">&#43; Add Dependency</button></div>
+              <div id="depList"></div>
+            </div>
         </div>
     </div>
 
@@ -440,14 +452,14 @@
     </div>
 
     <div class="footer">
-        <strong>BITSUMMIT</strong> — TSSA-Intune Mobile Environment Build & Nuclear Inspector Pilot Deployment — Synced via GitHub &bull; Last saved: <span id="lastSaved">Never</span>
+        <strong>BITSUMMIT</strong> â TSSA-Intune Mobile Environment Build & Nuclear Inspector Pilot Deployment â Synced via GitHub &bull; Last saved: <span id="lastSaved">Never</span>
     </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // ALL DATA
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 var PHASES = [
     {id:'p1',name:'Phase 1: Planning & Requirements Definition',dates:'Apr 1 \u2013 Apr 17',color:'p1',cost:3750,start:'2026-04-01',end:'2026-04-17'},
     {id:'p2',name:'Phase 2: Intune Build & Baseline Policy Config',dates:'Apr 17 \u2013 May 5',color:'p2',cost:12750,start:'2026-04-17',end:'2026-05-05'},
@@ -610,9 +622,9 @@ var CONTACTS = [
     {name:'Niel',role:'Account Representative',org:'CDW Canada',oc:'nl'}
 ];
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // GITHUB SYNC ENGINE
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 var ghConfig = null;
 var ghFileSHA = null;
 var syncMode = 'offline';
@@ -712,9 +724,9 @@ function saveAndSync() {
     else { document.getElementById('lastSaved').textContent = new Date().toLocaleString(); showToast('Saved locally. Connect to GitHub to share with team.', 'info'); }
 }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // LOCAL STATE
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 var state = { tasks: JSON.parse(JSON.stringify(TASKS)), deliverables: JSON.parse(JSON.stringify(DELIVERABLES)), actions: JSON.parse(JSON.stringify(ACTIONS)) };
 var taskFilter = 'all', ganttFilter = 'all', actionFilter = 'all';
 var taskSortCol = 'id', taskSortDir = 'asc';
@@ -733,9 +745,9 @@ function loadLocalState() {
 
 function saveLocalState() { try { localStorage.setItem('tssa_portal_v1', JSON.stringify(buildStatePayload())); } catch(e){} }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // HELPERS
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 function countStatus(s) { return state.tasks.filter(function(t){return t.status===s}).length; }
 function phaseLabel(p) { return {p1:'Phase 1',p2:'Phase 2',p3:'Phase 3',p4:'Phase 4',p5:'Phase 5',pm:'PM & Gov'}[p]||p; }
 function phaseColorHex(p) { return {p1:'#3b82f6',p2:'#6366f1',p3:'#f59e0b',p4:'#22c55e',p5:'#F12300',pm:'#94a3b8'}[p]||'#94a3b8'; }
@@ -750,9 +762,9 @@ function getPhaseProgress(pid) {
     return Math.round((done*100 + ip*50)/pts.length);
 }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // TABS
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 var tabList = ['overview','tasks','gantt','deliverables','actions','risks','raci','comms'];
 var tabLabels = ['Overview','Task Tracker','Gantt View','Deliverables','Action Items','Risks & Deps','RACI','Comms Plan'];
 
@@ -769,14 +781,14 @@ function switchTab(name, el) {
     if(el) el.classList.add('active');
 }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // RENDER ALL
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 function renderAll() { renderKPIs(); renderPhaseProgress(); renderPhaseChart(); renderDelivChart(); renderMilestones(); renderProjectInfo(); renderTasks(); renderGantt(); renderDeliverables(); renderActions(); renderRisks(); renderDeps(); renderRACI(); renderComms(); renderContacts(); saveLocalState(); }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // KPIs
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 function renderKPIs() {
     var total = state.tasks.length, done = countStatus('complete'), ip = countStatus('in-progress'), ong = countStatus('ongoing');
     var pct = total > 0 ? Math.round((done*100 + (ip+ong)*50) / total) : 0;
@@ -789,9 +801,9 @@ function renderKPIs() {
         '<div class="kpi red"><div class="kpi-label">Overall Progress</div><div class="kpi-value">'+pct+'%</div><div class="kpi-sub">'+daysLeft+' days remaining \u2022 Target: May 30</div></div>';
 }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // PHASE PROGRESS
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 function renderPhaseProgress() {
     var html = '';
     PHASES.forEach(function(p) {
@@ -803,9 +815,9 @@ function renderPhaseProgress() {
     document.getElementById('phaseProgress').innerHTML = html;
 }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // PHASE BAR CHART
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 function renderPhaseChart() {
     var phases = ['p1','p2','p3','p4','p5','pm'];
     var labels = ['P1','P2','P3','P4','P5','PM'];
@@ -825,9 +837,9 @@ function renderPhaseChart() {
     document.getElementById('phaseChart').innerHTML = html;
 }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // DONUT CHART
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 function renderDelivChart() {
     var counts = {ns: state.deliverables.filter(function(d){return d.status==='not-started'}).length, ip: state.deliverables.filter(function(d){return d.status==='in-progress'}).length, done: state.deliverables.filter(function(d){return d.status==='completed'}).length, bl: state.deliverables.filter(function(d){return d.status==='blocked'}).length};
     var total = state.deliverables.length;
@@ -851,9 +863,9 @@ function renderProjectInfo() {
     document.getElementById('projectInfo').innerHTML = '<table class="info-table">' + info.map(function(r){return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>'}).join('') + '</table>';
 }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // TASK TRACKER
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 function renderTasks() {
     var filtered = state.tasks.slice();
     if (taskFilter !== 'all') {
@@ -879,9 +891,9 @@ function renderTasks() {
     }).join('');
 }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // GANTT
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 function renderGantt() {
     var totalDays = daysBetween('2026-04-01','2026-05-31');
     var filtered = state.tasks.slice();
@@ -918,9 +930,9 @@ function renderGantt() {
     }).join('');
 }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // DELIVERABLES
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 function renderDeliverables() {
     document.getElementById('delivBody').innerHTML = state.deliverables.map(function(d){
         var barColor = d.progress>=100?'var(--green)':d.progress>50?'var(--blue)':d.progress>0?'var(--yellow)':'#e2e8f0';
@@ -928,9 +940,9 @@ function renderDeliverables() {
     }).join('');
 }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // ACTION ITEMS
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 function renderActions() {
     var filtered = state.actions.slice();
     var aIdx = state.actions.map(function(a,i){return {a:a,i:i}});
@@ -950,9 +962,9 @@ function renderActions() {
     }).join('');
 }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // RISKS & DEPS
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 function renderRisks() {
     document.getElementById('riskList').innerHTML = RISKS.map(function(r){
         return '<div class="risk-row"><div class="risk-severity '+r.sev+'"></div><div class="risk-info"><div class="risk-name">'+r.id+': '+r.name+'</div><div class="risk-detail">'+r.detail+'</div><div style="font-size:11px;color:var(--text-sec);margin-top:2px"><strong>Mitigation:</strong> '+r.mitigation+'</div></div><div class="risk-badge" style="background:'+(r.sev==='high'?'#fee2e2':'#fef9c3')+';color:'+(r.sev==='high'?'#dc2626':'#ca8a04')+'">'+r.sev.toUpperCase()+'</div></div>';
@@ -965,9 +977,9 @@ function renderDeps() {
     }).join('');
 }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // RACI
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 function renderRACI() {
     var html = '<table class="raci-table"><thead><tr><th style="text-align:left">Activity / Deliverable</th><th>Rejaa (PM)</th><th>Amitosh (TL)</th><th>Hassan (EDL)</th><th>Rizgar</th><th>Khalid</th><th>Sutharsan</th><th>Mandeep</th></tr></thead><tbody>';
     RACI_DATA.forEach(function(r){
@@ -981,9 +993,9 @@ function renderRACI() {
     document.getElementById('raciTable').innerHTML = html;
 }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // COMMS & CONTACTS
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 function renderComms() {
     var html = '<div class="comm-row"><div>Communication</div><div>Frequency / Format</div><div>Participants</div><div>Owner</div></div>';
     COMMS.forEach(function(c){ html += '<div class="comm-row"><div style="font-weight:600;color:var(--dark-blue)">'+c.type+'</div><div>'+c.freq+'</div><div>'+c.who+'</div><div style="color:var(--vermilion);font-weight:600">'+c.owner+'</div></div>'; });
@@ -996,9 +1008,9 @@ function renderContacts() {
     }).join('');
 }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // INTERACTIONS
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 function toggleCheck(id) { var t = state.tasks.find(function(x){return x.id===id}); if(t){t.chk=!t.chk;if(t.chk&&t.status!=='complete'){t.status='complete'}if(!t.chk&&t.status==='complete'){t.status='not-started'} renderAll();} }
 function updateTaskStatus(id, val) { var t = state.tasks.find(function(x){return x.id===id}); if(t){t.status=val;t.chk=val==='complete';renderAll();showToast(id+' \u2192 '+statusLabel(val),'success')} }
 function updateDelivStatus(id, val) { var d = state.deliverables.find(function(x){return x.id===id}); if(d){d.status=val;if(val==='completed')d.progress=100;renderAll();} }
@@ -1007,9 +1019,9 @@ function updateActionStatus(idx, val) { state.actions[idx].status = val; renderA
 function setTaskFilter(val) { taskFilter=val; renderTasks(); }
 function sortTasks(col) { if(taskSortCol===col) taskSortDir=taskSortDir==='asc'?'desc':'asc'; else{taskSortCol=col;taskSortDir='asc';} renderTasks(); }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // EXCEL EXPORT (styled like SLS)
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 function exportExcel() {
     var wb = XLSX.utils.book_new();
     var darkBlue='001E35',vermilion='F12300',white='FFFFFF',lightGray='F4F6F9',green='22C55E',yellow='F59E0B',blue='3B82F6',red='EF4444',gray='94A3B8',textDark='1A1A2E';
@@ -1080,9 +1092,9 @@ function exportHTML() {
     showToast('HTML dashboard downloaded!','success');
 }
 
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 // INIT
-// ═══════════════════════════════════════
+// âââââââââââââââââââââââââââââââââââââââ
 (function init() {
     loadLocalState();
     renderTabs();
@@ -1106,5 +1118,601 @@ function exportHTML() {
     }, 60000);
 })();
 </script>
+
+
+<!-- ============================================================
+     PM MANAGEMENT MODALS & JS - Added for PM edit capabilities
+     ============================================================ -->
+<style>
+.pm-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9000;align-items:center;justify-content:center;}
+.pm-modal-overlay.open{display:flex;}
+.pm-modal{background:#fff;border-radius:12px;padding:28px 32px;width:520px;max-width:96vw;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,0.3);}
+.pm-modal h3{margin:0 0 20px;font-size:17px;font-weight:700;color:#1e293b;}
+.pm-modal label{display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:4px;margin-top:12px;}
+.pm-modal input,.pm-modal select,.pm-modal textarea{width:100%;box-sizing:border-box;padding:8px 10px;border:1.5px solid #cbd5e1;border-radius:6px;font-size:13px;font-family:inherit;background:#f8fafc;color:#1e293b;}
+.pm-modal textarea{resize:vertical;min-height:60px;}
+.pm-modal input:focus,.pm-modal select:focus,.pm-modal textarea:focus{outline:none;border-color:#2563eb;background:#fff;}
+.pm-modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
+.pm-modal-btns button{padding:9px 22px;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;}
+.pm-btn-save{background:#2563eb;color:#fff;}
+.pm-btn-save:hover{background:#1d4ed8;}
+.pm-btn-cancel{background:#e2e8f0;color:#475569;}
+.pm-btn-cancel:hover{background:#cbd5e1;}
+.pm-form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+/* Edit/Delete inline buttons in task rows */
+.pm-row-actions{display:flex;gap:4px;justify-content:flex-end;}
+.pm-edit-btn,.pm-del-btn{border:none;border-radius:4px;padding:3px 8px;font-size:11px;font-weight:600;cursor:pointer;}
+.pm-edit-btn{background:#dbeafe;color:#1d4ed8;}
+.pm-del-btn{background:#fee2e2;color:#dc2626;}
+.pm-edit-btn:hover{background:#bfdbfe;}
+.pm-del-btn:hover{background:#fecaca;}
+/* Action row edit buttons */
+.action-row{position:relative;}
+.action-row .pm-row-actions{position:absolute;top:8px;right:8px;opacity:0;transition:opacity 0.15s;}
+.action-row:hover .pm-row-actions{opacity:1;}
+/* Risk row edit buttons */
+.risk-row{position:relative;}
+.risk-row .pm-row-actions{position:absolute;top:8px;right:8px;opacity:0;transition:opacity 0.15s;}
+.risk-row:hover .pm-row-actions{opacity:1;}
+/* Dep row edit */
+.dep-flow-item{position:relative;display:flex;align-items:center;gap:6px;margin-bottom:8px;}
+.dep-flow-item .pm-row-actions{opacity:0;transition:opacity 0.15s;}
+.dep-flow-item:hover .pm-row-actions{opacity:1;}
+</style>
+
+<!-- ADD TASK MODAL -->
+<div class="pm-modal-overlay" id="addTaskModal">
+  <div class="pm-modal">
+    <h3 id="addTaskModalTitle">Add New Task</h3>
+    <input type="hidden" id="editTaskIdx" value="">
+    <label>Task ID</label>
+    <input type="text" id="fTaskId" placeholder="e.g. T47">
+    <label>Task Description</label>
+    <textarea id="fTaskDesc" rows="2" placeholder="Describe the task..."></textarea>
+    <div class="pm-form-row">
+      <div>
+        <label>Owner</label>
+        <input type="text" id="fTaskOwner" placeholder="e.g. Rejaa / TSSA IT">
+      </div>
+      <div>
+        <label>Owner Code (2 letters)</label>
+        <input type="text" id="fTaskOc" placeholder="e.g. rj" maxlength="4">
+      </div>
+    </div>
+    <div class="pm-form-row">
+      <div>
+        <label>Phase</label>
+        <select id="fTaskPhase">
+          <option value="p1">Phase 1 – Planning & Requirements</option>
+          <option value="p2">Phase 2 – Intune Build & Baseline</option>
+          <option value="p3">Phase 3 – Pilot Enrollment (POC)</option>
+          <option value="p4">Phase 4 – Production Pilot</option>
+          <option value="p5">Phase 5 – Knowledge Transfer</option>
+          <option value="pm">PM & Governance</option>
+        </select>
+      </div>
+      <div>
+        <label>Priority</label>
+        <select id="fTaskPri">
+          <option value="critical">Critical</option>
+          <option value="high" selected>High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+    </div>
+    <div class="pm-form-row">
+      <div>
+        <label>Start Date</label>
+        <input type="date" id="fTaskStart">
+      </div>
+      <div>
+        <label>End Date</label>
+        <input type="date" id="fTaskEnd">
+      </div>
+    </div>
+    <label>Status</label>
+    <select id="fTaskStatus">
+      <option value="not-started">Not Started</option>
+      <option value="in-progress">In Progress</option>
+      <option value="blocked">Blocked</option>
+      <option value="complete">Complete</option>
+    </select>
+    <div class="pm-modal-btns">
+      <button class="pm-btn-cancel" onclick="closeAddTaskModal()">Cancel</button>
+      <button class="pm-btn-save" onclick="saveTask()">Save Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD ACTION ITEM MODAL -->
+<div class="pm-modal-overlay" id="addActionModal">
+  <div class="pm-modal">
+    <h3 id="addActionModalTitle">Add Action Item</h3>
+    <input type="hidden" id="editActionIdx" value="">
+    <label>Owner Name</label>
+    <input type="text" id="fActionOwner" placeholder="e.g. Rejaa Khalid">
+    <label>Owner Code (2 letters)</label>
+    <input type="text" id="fActionOc" placeholder="e.g. rj" maxlength="4">
+    <label>Description</label>
+    <textarea id="fActionDesc" rows="3" placeholder="Describe the action item..."></textarea>
+    <label>Due Date</label>
+    <input type="text" id="fActionDue" placeholder="e.g. April 20, 2026 or ASAP">
+    <label>Status</label>
+    <select id="fActionStatus">
+      <option value="not-started">Not Started</option>
+      <option value="in-progress">In Progress</option>
+      <option value="complete">Complete</option>
+    </select>
+    <div class="pm-modal-btns">
+      <button class="pm-btn-cancel" onclick="closeAddActionModal()">Cancel</button>
+      <button class="pm-btn-save" onclick="saveAction()">Save Action Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD RISK MODAL -->
+<div class="pm-modal-overlay" id="addRiskModal">
+  <div class="pm-modal">
+    <h3 id="addRiskModalTitle">Add Risk</h3>
+    <input type="hidden" id="editRiskIdx" value="">
+    <label>Risk ID</label>
+    <input type="text" id="fRiskId" placeholder="e.g. R9">
+    <label>Risk Name</label>
+    <input type="text" id="fRiskName" placeholder="Short risk title...">
+    <label>Detail / Impact</label>
+    <textarea id="fRiskDetail" rows="2" placeholder="Describe the impact..."></textarea>
+    <label>Mitigation</label>
+    <textarea id="fRiskMitigation" rows="2" placeholder="Mitigation strategy..."></textarea>
+    <div class="pm-form-row">
+      <div>
+        <label>Severity</label>
+        <select id="fRiskSev">
+          <option value="high">High</option>
+          <option value="medium" selected>Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+      <div>
+        <label>Owner</label>
+        <input type="text" id="fRiskOwner" placeholder="e.g. Khalid / Rejaa">
+      </div>
+    </div>
+    <div class="pm-modal-btns">
+      <button class="pm-btn-cancel" onclick="closeAddRiskModal()">Cancel</button>
+      <button class="pm-btn-save" onclick="saveRisk()">Save Risk</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD DEPENDENCY MODAL -->
+<div class="pm-modal-overlay" id="addDepModal">
+  <div class="pm-modal">
+    <h3 id="addDepModalTitle">Add Dependency</h3>
+    <input type="hidden" id="editDepIdx" value="">
+    <label>From (prerequisite)</label>
+    <input type="text" id="fDepFrom" placeholder="e.g. Bruce Power Docs (T05)">
+    <label>To (dependent task)</label>
+    <input type="text" id="fDepTo" placeholder="e.g. Architecture Design (T09)">
+    <label>Arrow Color</label>
+    <select id="fDepColor">
+      <option value="#ef4444">Red – Blocking</option>
+      <option value="#f97316">Orange – High Risk</option>
+      <option value="#eab308">Yellow – Medium Risk</option>
+      <option value="#22c55e">Green – Low Risk</option>
+      <option value="#3b82f6">Blue – Informational</option>
+    </select>
+    <div class="pm-modal-btns">
+      <button class="pm-btn-cancel" onclick="closeAddDepModal()">Cancel</button>
+      <button class="pm-btn-save" onclick="saveDep()">Save Dependency</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// PM MANAGEMENT FUNCTIONS
+// ============================================================
+
+// ---- TASK MANAGEMENT ----
+function showAddTaskModal(editIdx) {
+  const modal = document.getElementById('addTaskModal');
+  const isEdit = editIdx !== undefined && editIdx !== null && editIdx !== '';
+  document.getElementById('addTaskModalTitle').textContent = isEdit ? 'Edit Task' : 'Add New Task';
+  document.getElementById('editTaskIdx').value = isEdit ? editIdx : '';
+  if (isEdit) {
+    const t = TASKS[editIdx];
+    document.getElementById('fTaskId').value = t.id || '';
+    document.getElementById('fTaskDesc').value = t.desc || '';
+    document.getElementById('fTaskOwner').value = t.owner || '';
+    document.getElementById('fTaskOc').value = t.oc || '';
+    document.getElementById('fTaskPhase').value = t.phase || 'p1';
+    document.getElementById('fTaskPri').value = t.pri || 'high';
+    document.getElementById('fTaskStart').value = t.start || '';
+    document.getElementById('fTaskEnd').value = t.end || '';
+    document.getElementById('fTaskStatus').value = t.status || 'not-started';
+  } else {
+    document.getElementById('fTaskId').value = 'T' + (TASKS.length + 1);
+    document.getElementById('fTaskDesc').value = '';
+    document.getElementById('fTaskOwner').value = '';
+    document.getElementById('fTaskOc').value = '';
+    document.getElementById('fTaskPhase').value = 'p1';
+    document.getElementById('fTaskPri').value = 'high';
+    document.getElementById('fTaskStart').value = '';
+    document.getElementById('fTaskEnd').value = '';
+    document.getElementById('fTaskStatus').value = 'not-started';
+  }
+  modal.classList.add('open');
+}
+function closeAddTaskModal() { document.getElementById('addTaskModal').classList.remove('open'); }
+function saveTask() {
+  const editIdx = document.getElementById('editTaskIdx').value;
+  const task = {
+    id: document.getElementById('fTaskId').value.trim(),
+    desc: document.getElementById('fTaskDesc').value.trim(),
+    owner: document.getElementById('fTaskOwner').value.trim(),
+    oc: document.getElementById('fTaskOc').value.trim().toLowerCase(),
+    phase: document.getElementById('fTaskPhase').value,
+    pri: document.getElementById('fTaskPri').value,
+    start: document.getElementById('fTaskStart').value,
+    end: document.getElementById('fTaskEnd').value,
+    status: document.getElementById('fTaskStatus').value,
+    chk: document.getElementById('fTaskStatus').value === 'complete'
+  };
+  if (!task.desc) { alert('Please enter a task description.'); return; }
+  if (editIdx !== '') {
+    TASKS[parseInt(editIdx)] = task;
+    const si = state.tasks.findIndex(t => t.id === task.id);
+    if (si !== -1) state.tasks[si] = { id: task.id, status: task.status, chk: task.chk };
+    else state.tasks.push({ id: task.id, status: task.status, chk: task.chk });
+  } else {
+    TASKS.push(task);
+    state.tasks.push({ id: task.id, status: task.status, chk: task.chk });
+  }
+  closeAddTaskModal();
+  renderAll();
+  saveAndSync();
+}
+function deleteTask(idx) {
+  if (!confirm('Delete this task? This cannot be undone.')) return;
+  const taskId = TASKS[idx].id;
+  TASKS.splice(idx, 1);
+  const si = state.tasks.findIndex(t => t.id === taskId);
+  if (si !== -1) state.tasks.splice(si, 1);
+  renderAll();
+  saveAndSync();
+}
+
+// ---- ACTION ITEM MANAGEMENT ----
+function showAddActionModal(editIdx) {
+  const modal = document.getElementById('addActionModal');
+  const isEdit = editIdx !== undefined && editIdx !== null && editIdx !== '';
+  document.getElementById('addActionModalTitle').textContent = isEdit ? 'Edit Action Item' : 'Add Action Item';
+  document.getElementById('editActionIdx').value = isEdit ? editIdx : '';
+  if (isEdit) {
+    const a = ACTIONS[editIdx];
+    document.getElementById('fActionOwner').value = a.owner || '';
+    document.getElementById('fActionOc').value = a.oc || '';
+    document.getElementById('fActionDesc').value = a.desc || '';
+    document.getElementById('fActionDue').value = a.due || '';
+    document.getElementById('fActionStatus').value = a.status || 'not-started';
+  } else {
+    document.getElementById('fActionOwner').value = '';
+    document.getElementById('fActionOc').value = '';
+    document.getElementById('fActionDesc').value = '';
+    document.getElementById('fActionDue').value = '';
+    document.getElementById('fActionStatus').value = 'not-started';
+  }
+  modal.classList.add('open');
+}
+function closeAddActionModal() { document.getElementById('addActionModal').classList.remove('open'); }
+function saveAction() {
+  const editIdx = document.getElementById('editActionIdx').value;
+  const action = {
+    owner: document.getElementById('fActionOwner').value.trim(),
+    oc: document.getElementById('fActionOc').value.trim().toLowerCase(),
+    desc: document.getElementById('fActionDesc').value.trim(),
+    due: document.getElementById('fActionDue').value.trim(),
+    status: document.getElementById('fActionStatus').value
+  };
+  if (!action.desc) { alert('Please enter a description.'); return; }
+  if (editIdx !== '') {
+    const idx = parseInt(editIdx);
+    ACTIONS[idx] = action;
+    state.actions[idx] = { idx: idx, status: action.status };
+  } else {
+    ACTIONS.push(action);
+    state.actions.push({ idx: ACTIONS.length - 1, status: action.status });
+  }
+  closeAddActionModal();
+  renderActions();
+  saveAndSync();
+}
+function deleteAction(idx) {
+  if (!confirm('Delete this action item?')) return;
+  ACTIONS.splice(idx, 1);
+  state.actions.splice(idx, 1);
+  renderActions();
+  saveAndSync();
+}
+
+// ---- RISK MANAGEMENT ----
+function showAddRiskModal(editIdx) {
+  const modal = document.getElementById('addRiskModal');
+  const isEdit = editIdx !== undefined && editIdx !== null && editIdx !== '';
+  document.getElementById('addRiskModalTitle').textContent = isEdit ? 'Edit Risk' : 'Add Risk';
+  document.getElementById('editRiskIdx').value = isEdit ? editIdx : '';
+  if (isEdit) {
+    const r = RISKS[editIdx];
+    document.getElementById('fRiskId').value = r.id || '';
+    document.getElementById('fRiskName').value = r.name || '';
+    document.getElementById('fRiskDetail').value = r.detail || '';
+    document.getElementById('fRiskMitigation').value = r.mitigation || '';
+    document.getElementById('fRiskSev').value = r.sev || 'medium';
+    document.getElementById('fRiskOwner').value = r.owner || '';
+  } else {
+    document.getElementById('fRiskId').value = 'R' + (RISKS.length + 1);
+    document.getElementById('fRiskName').value = '';
+    document.getElementById('fRiskDetail').value = '';
+    document.getElementById('fRiskMitigation').value = '';
+    document.getElementById('fRiskSev').value = 'medium';
+    document.getElementById('fRiskOwner').value = '';
+  }
+  modal.classList.add('open');
+}
+function closeAddRiskModal() { document.getElementById('addRiskModal').classList.remove('open'); }
+function saveRisk() {
+  const editIdx = document.getElementById('editRiskIdx').value;
+  const risk = {
+    id: document.getElementById('fRiskId').value.trim(),
+    name: document.getElementById('fRiskName').value.trim(),
+    detail: document.getElementById('fRiskDetail').value.trim(),
+    mitigation: document.getElementById('fRiskMitigation').value.trim(),
+    sev: document.getElementById('fRiskSev').value,
+    owner: document.getElementById('fRiskOwner').value.trim()
+  };
+  if (!risk.name) { alert('Please enter a risk name.'); return; }
+  if (editIdx !== '') { RISKS[parseInt(editIdx)] = risk; }
+  else { RISKS.push(risk); }
+  closeAddRiskModal();
+  renderRisks();
+  saveAndSync();
+}
+function deleteRisk(idx) {
+  if (!confirm('Delete this risk?')) return;
+  RISKS.splice(idx, 1);
+  renderRisks();
+  saveAndSync();
+}
+
+// ---- DEPENDENCY MANAGEMENT ----
+function showAddDepModal(editIdx) {
+  const modal = document.getElementById('addDepModal');
+  const isEdit = editIdx !== undefined && editIdx !== null && editIdx !== '';
+  document.getElementById('addDepModalTitle').textContent = isEdit ? 'Edit Dependency' : 'Add Dependency';
+  document.getElementById('editDepIdx').value = isEdit ? editIdx : '';
+  if (isEdit) {
+    const d = DEPS[editIdx];
+    document.getElementById('fDepFrom').value = d.from || '';
+    document.getElementById('fDepTo').value = d.to || '';
+    document.getElementById('fDepColor').value = d.c || '#ef4444';
+  } else {
+    document.getElementById('fDepFrom').value = '';
+    document.getElementById('fDepTo').value = '';
+    document.getElementById('fDepColor').value = '#ef4444';
+  }
+  modal.classList.add('open');
+}
+function closeAddDepModal() { document.getElementById('addDepModal').classList.remove('open'); }
+function saveDep() {
+  const editIdx = document.getElementById('editDepIdx').value;
+  const dep = {
+    from: document.getElementById('fDepFrom').value.trim(),
+    to: document.getElementById('fDepTo').value.trim(),
+    c: document.getElementById('fDepColor').value
+  };
+  if (!dep.from || !dep.to) { alert('Please fill in both From and To fields.'); return; }
+  if (editIdx !== '') { DEPS[parseInt(editIdx)] = dep; }
+  else { DEPS.push(dep); }
+  closeAddDepModal();
+  renderDeps();
+  saveAndSync();
+}
+function deleteDep(idx) {
+  if (!confirm('Delete this dependency?')) return;
+  DEPS.splice(idx, 1);
+  renderDeps();
+  saveAndSync();
+}
+
+// Close modals on overlay click
+['addTaskModal','addActionModal','addRiskModal','addDepModal'].forEach(id => {
+  document.getElementById(id).addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+});
+
+// ---- POST-RENDER EDIT/DELETE INJECTION ----
+// Wraps existing render functions to inject PM controls after rendering
+
+const _origRenderTasks = window.renderTasks;
+window.renderTasks = function() {
+  _origRenderTasks.apply(this, arguments);
+  pmInjectTaskControls();
+};
+
+const _origRenderActions = window.renderActions;
+window.renderActions = function() {
+  _origRenderActions.apply(this, arguments);
+  pmInjectActionControls();
+};
+
+const _origRenderRisks = window.renderRisks;
+window.renderRisks = function() {
+  _origRenderRisks.apply(this, arguments);
+  pmInjectRiskControls();
+};
+
+const _origRenderDeps = window.renderDeps;
+window.renderDeps = function() {
+  _origRenderDeps.apply(this, arguments);
+  pmInjectDepControls();
+};
+
+function pmInjectTaskControls() {
+  const tbody = document.getElementById('taskBody');
+  if (!tbody) return;
+  // Add header if not exists
+  const thead = tbody.closest('table').querySelector('thead tr');
+  if (thead && !thead.querySelector('.pm-th-actions')) {
+    const th = document.createElement('th');
+    th.className = 'pm-th-actions';
+    th.style.cssText = 'width:80px;';
+    thead.appendChild(th);
+  }
+  const rows = tbody.querySelectorAll('tr');
+  rows.forEach((row, idx) => {
+    if (row.querySelector('.pm-row-actions')) return; // already injected
+    const td = document.createElement('td');
+    td.innerHTML = '<div class="pm-row-actions"><button class="pm-edit-btn" onclick="showAddTaskModal('+idx+')">Edit</button><button class="pm-del-btn" onclick="deleteTask('+idx+')">Del</button></div>';
+    row.appendChild(td);
+  });
+}
+
+function pmInjectActionControls() {
+  const list = document.getElementById('actionList');
+  if (!list) return;
+  const rows = list.querySelectorAll('.action-row');
+  rows.forEach((row, idx) => {
+    if (row.querySelector('.pm-row-actions')) return;
+    const div = document.createElement('div');
+    div.className = 'pm-row-actions';
+    div.style.cssText = 'position:absolute;top:8px;right:8px;display:flex;gap:4px;opacity:0;transition:opacity 0.15s;';
+    div.innerHTML = '<button class="pm-edit-btn" onclick="showAddActionModal('+idx+')">Edit</button><button class="pm-del-btn" onclick="deleteAction('+idx+')">Del</button>';
+    row.style.position = 'relative';
+    row.appendChild(div);
+    row.addEventListener('mouseenter', () => div.style.opacity = '1');
+    row.addEventListener('mouseleave', () => div.style.opacity = '0');
+  });
+}
+
+function pmInjectRiskControls() {
+  const list = document.getElementById('riskList');
+  if (!list) return;
+  const rows = list.querySelectorAll('.risk-row');
+  rows.forEach((row, idx) => {
+    if (row.querySelector('.pm-row-actions')) return;
+    const div = document.createElement('div');
+    div.className = 'pm-row-actions';
+    div.style.cssText = 'position:absolute;top:8px;right:8px;display:flex;gap:4px;opacity:0;transition:opacity 0.15s;';
+    div.innerHTML = '<button class="pm-edit-btn" onclick="showAddRiskModal('+idx+')">Edit</button><button class="pm-del-btn" onclick="deleteRisk('+idx+')">Del</button>';
+    row.style.position = 'relative';
+    row.appendChild(div);
+    row.addEventListener('mouseenter', () => div.style.opacity = '1');
+    row.addEventListener('mouseleave', () => div.style.opacity = '0');
+  });
+}
+
+function pmInjectDepControls() {
+  const list = document.getElementById('depList');
+  if (!list) return;
+  // Wrap each dep-flow item
+  const arrows = list.querySelectorAll('.dep-arrow');
+  const flows = list.querySelectorAll('.dep-flow');
+  flows.forEach((flow, idx) => {
+    if (flow.querySelector('.pm-row-actions')) return;
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'display:flex;align-items:center;gap:6px;margin-bottom:4px;';
+    flow.parentNode.insertBefore(wrapper, flow);
+    wrapper.appendChild(flow);
+    const div = document.createElement('div');
+    div.className = 'pm-row-actions';
+    div.style.cssText = 'display:flex;gap:4px;opacity:0;transition:opacity 0.15s;';
+    div.innerHTML = '<button class="pm-edit-btn" onclick="showAddDepModal('+idx+')">Edit</button><button class="pm-del-btn" onclick="deleteDep('+idx+')">Del</button>';
+    wrapper.appendChild(div);
+    wrapper.addEventListener('mouseenter', () => div.style.opacity = '1');
+    wrapper.addEventListener('mouseleave', () => div.style.opacity = '0');
+  });
+}
+
+// Trigger initial injection after page loads
+setTimeout(function() {
+  pmInjectTaskControls();
+  pmInjectActionControls();
+  pmInjectRiskControls();
+  pmInjectDepControls();
+}, 500);
+
+// ---- EXTENDED STATE PERSISTENCE (PM additions) ----
+// Override buildStatePayload to include PM-added data
+const _origBuildStatePayload = window.buildStatePayload;
+window.buildStatePayload = function() {
+  const base = _origBuildStatePayload();
+  // Include full TASKS, ACTIONS, RISKS, DEPS arrays for PM-added items
+  const taskCount = window._baseTaskCount || 46;
+  const actionCount = window._baseActionCount || 9;
+  const riskCount = window._baseRiskCount || 8;
+  const depCount = window._baseDepCount || 9;
+  // Only save PM-added/modified items beyond the base
+  base.pmTasks = TASKS.map(t => ({id:t.id,desc:t.desc,owner:t.owner,oc:t.oc,phase:t.phase,pri:t.pri,start:t.start,end:t.end,status:t.status,chk:t.chk}));
+  base.pmActions = ACTIONS.map(a => ({owner:a.owner,oc:a.oc,desc:a.desc,due:a.due,status:a.status}));
+  base.pmRisks = RISKS.map(r => ({id:r.id,name:r.name,detail:r.detail,sev:r.sev,mitigation:r.mitigation,owner:r.owner}));
+  base.pmDeps = DEPS.map(d => ({from:d.from,to:d.to,c:d.c}));
+  return base;
+};
+
+// Override applyRemoteState to restore PM data
+const _origApplyRemoteState = window.applyRemoteState;
+window.applyRemoteState = function(remote) {
+  _origApplyRemoteState(remote);
+  if (remote.pmTasks && remote.pmTasks.length > 0) {
+    // Replace TASKS with saved full data
+    TASKS.length = 0;
+    remote.pmTasks.forEach(t => TASKS.push(t));
+  }
+  if (remote.pmActions && remote.pmActions.length > 0) {
+    ACTIONS.length = 0;
+    remote.pmActions.forEach(a => ACTIONS.push(a));
+  }
+  if (remote.pmRisks && remote.pmRisks.length > 0) {
+    RISKS.length = 0;
+    remote.pmRisks.forEach(r => RISKS.push(r));
+  }
+  if (remote.pmDeps && remote.pmDeps.length > 0) {
+    DEPS.length = 0;
+    remote.pmDeps.forEach(d => DEPS.push(d));
+  }
+  renderAll();
+};
+
+// Override saveLocalState to include full PM data
+const _origSaveLocalState = window.saveLocalState;
+window.saveLocalState = function() {
+  _origSaveLocalState();
+  try {
+    localStorage.setItem('tssa_pm_tasks', JSON.stringify(TASKS));
+    localStorage.setItem('tssa_pm_actions', JSON.stringify(ACTIONS));
+    localStorage.setItem('tssa_pm_risks', JSON.stringify(RISKS));
+    localStorage.setItem('tssa_pm_deps', JSON.stringify(DEPS));
+  } catch(e) {}
+};
+
+// Override loadLocalState to restore PM data
+const _origLoadLocalState = window.loadLocalState;
+window.loadLocalState = function() {
+  _origLoadLocalState();
+  try {
+    const t = localStorage.getItem('tssa_pm_tasks');
+    const a = localStorage.getItem('tssa_pm_actions');
+    const r = localStorage.getItem('tssa_pm_risks');
+    const d = localStorage.getItem('tssa_pm_deps');
+    if (t) { const arr = JSON.parse(t); TASKS.length = 0; arr.forEach(x => TASKS.push(x)); }
+    if (a) { const arr = JSON.parse(a); ACTIONS.length = 0; arr.forEach(x => ACTIONS.push(x)); }
+    if (r) { const arr = JSON.parse(r); RISKS.length = 0; arr.forEach(x => RISKS.push(r)); }
+    if (d) { const arr = JSON.parse(d); DEPS.length = 0; arr.forEach(x => DEPS.push(x)); }
+  } catch(e) {}
+};
+</script>
+
 </body>
 </html>
