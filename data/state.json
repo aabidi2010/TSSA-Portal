@@ -301,6 +301,738 @@
       "status": "not-started"
     }
   ],
-  "savedAt": "2026-04-14T15:07:30.505Z",
-  "savedBy": "portal"
+  "savedAt": "2026-04-14T15:09:23.196Z",
+  "savedBy": "portal",
+  "pmTasks": [
+    {
+      "id": "T01",
+      "desc": "Phase 1 Technical Working Session (discovery workshop)",
+      "owner": "Amitosh / TSSA IT",
+      "oc": "am",
+      "phase": "p1",
+      "pri": "high",
+      "start": "2026-04-08",
+      "end": "2026-04-10",
+      "status": "complete",
+      "chk": true
+    },
+    {
+      "id": "T02",
+      "desc": "Validate M365 E3 / Intune MDM licensing",
+      "owner": "TSSA (Rizgar)",
+      "oc": "rz",
+      "phase": "p1",
+      "pri": "high",
+      "start": "2026-04-08",
+      "end": "2026-04-09",
+      "status": "complete",
+      "chk": true
+    },
+    {
+      "id": "T03",
+      "desc": "Confirm Apple Business Manager enrollment status",
+      "owner": "TSSA (Rizgar)",
+      "oc": "rz",
+      "phase": "p1",
+      "pri": "high",
+      "start": "2026-04-07",
+      "end": "2026-04-09",
+      "status": "in-progress",
+      "chk": false
+    },
+    {
+      "id": "T04",
+      "desc": "Confirm Defender for Endpoint mobile licensing",
+      "owner": "TSSA (Rizgar)",
+      "oc": "rz",
+      "phase": "p1",
+      "pri": "high",
+      "start": "2026-04-07",
+      "end": "2026-04-09",
+      "status": "in-progress",
+      "chk": false
+    },
+    {
+      "id": "T05",
+      "desc": "Receive & review Bruce Power restriction documentation",
+      "owner": "Khalid / Hassan",
+      "oc": "km",
+      "phase": "p1",
+      "pri": "critical",
+      "start": "2026-04-01",
+      "end": "2026-04-10",
+      "status": "in-progress",
+      "chk": false
+    },
+    {
+      "id": "T06",
+      "desc": "Confirm iCloud usage posture (allowed / restricted / conditional)",
+      "owner": "TSSA (Rizgar/Khalid)",
+      "oc": "rz",
+      "phase": "p1",
+      "pri": "medium",
+      "start": "2026-04-07",
+      "end": "2026-04-11",
+      "status": "in-progress",
+      "chk": false
+    },
+    {
+      "id": "T07",
+      "desc": "Confirm AirWatch/Workspace ONE URL accessibility",
+      "owner": "TSSA (Rizgar)",
+      "oc": "rz",
+      "phase": "p1",
+      "pri": "medium",
+      "start": "2026-04-07",
+      "end": "2026-04-11",
+      "status": "in-progress",
+      "chk": false
+    },
+    {
+      "id": "T08",
+      "desc": "Provision required access: M365, ABM, Defender, PKI, AirWatch",
+      "owner": "TSSA (Rizgar)",
+      "oc": "rz",
+      "phase": "p1",
+      "pri": "critical",
+      "start": "2026-04-01",
+      "end": "2026-04-11",
+      "status": "in-progress",
+      "chk": false
+    },
+    {
+      "id": "T09",
+      "desc": "Define Intune architecture for mobile-only deployment",
+      "owner": "Amitosh",
+      "oc": "am",
+      "phase": "p1",
+      "pri": "high",
+      "start": "2026-04-09",
+      "end": "2026-04-14",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T10",
+      "desc": "Produce Requirements Summary & validated security controls list",
+      "owner": "Amitosh / Rejaa",
+      "oc": "am",
+      "phase": "p1",
+      "pri": "high",
+      "start": "2026-04-11",
+      "end": "2026-04-17",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T11",
+      "desc": "Configure enrollment restrictions & platform compliance baselines",
+      "owner": "Amitosh",
+      "oc": "am",
+      "phase": "p2",
+      "pri": "high",
+      "start": "2026-04-17",
+      "end": "2026-04-23",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T12",
+      "desc": "Configure device config profiles (camera, hotspot, USB/BT, network)",
+      "owner": "Amitosh",
+      "oc": "am",
+      "phase": "p2",
+      "pri": "critical",
+      "start": "2026-04-17",
+      "end": "2026-04-23",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T13",
+      "desc": "Configure Application Protection Policies (APP/MAM)",
+      "owner": "Amitosh",
+      "oc": "am",
+      "phase": "p2",
+      "pri": "high",
+      "start": "2026-04-21",
+      "end": "2026-04-24",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T14",
+      "desc": "Configure device compliance policies (OS version, encryption, PIN)",
+      "owner": "Amitosh",
+      "oc": "am",
+      "phase": "p2",
+      "pri": "high",
+      "start": "2026-04-21",
+      "end": "2026-04-24",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T15",
+      "desc": "Configure Conditional Access for pilot groups",
+      "owner": "Amitosh",
+      "oc": "am",
+      "phase": "p2",
+      "pri": "high",
+      "start": "2026-04-23",
+      "end": "2026-04-28",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T16",
+      "desc": "Configure certificate-based auth (SCEP/PKCS) — PKI by TSSA",
+      "owner": "Amitosh / TSSA",
+      "oc": "am",
+      "phase": "p2",
+      "pri": "critical",
+      "start": "2026-04-23",
+      "end": "2026-04-28",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T17",
+      "desc": "Integrate Microsoft Defender for Endpoint (Mobile)",
+      "owner": "Amitosh",
+      "oc": "am",
+      "phase": "p2",
+      "pri": "high",
+      "start": "2026-04-24",
+      "end": "2026-04-29",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T18",
+      "desc": "Integrate Defender risk signals with Conditional Access",
+      "owner": "Amitosh",
+      "oc": "am",
+      "phase": "p2",
+      "pri": "high",
+      "start": "2026-04-28",
+      "end": "2026-04-30",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T19",
+      "desc": "Configure Apple App Store & iCloud governance controls",
+      "owner": "Amitosh",
+      "oc": "am",
+      "phase": "p2",
+      "pri": "medium",
+      "start": "2026-04-28",
+      "end": "2026-04-30",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T20",
+      "desc": "Establish reporting/monitoring views (non-compliance, posture)",
+      "owner": "Amitosh",
+      "oc": "am",
+      "phase": "p2",
+      "pri": "medium",
+      "start": "2026-04-29",
+      "end": "2026-05-01",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T21",
+      "desc": "Configure assignment groups for inspector pilot deployment",
+      "owner": "Amitosh / TSSA",
+      "oc": "am",
+      "phase": "p2",
+      "pri": "medium",
+      "start": "2026-04-29",
+      "end": "2026-05-01",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T22",
+      "desc": "Produce Environment Build Document",
+      "owner": "Amitosh / Rejaa",
+      "oc": "am",
+      "phase": "p2",
+      "pri": "high",
+      "start": "2026-04-30",
+      "end": "2026-05-05",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T23",
+      "desc": "Prepare test devices for enrollment (Sutharsan's device)",
+      "owner": "TSSA (Sutharsan)",
+      "oc": "su",
+      "phase": "p3",
+      "pri": "high",
+      "start": "2026-05-05",
+      "end": "2026-05-07",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T24",
+      "desc": "Enroll 2–3 inspector devices into Intune",
+      "owner": "Amitosh / Sutharsan",
+      "oc": "am",
+      "phase": "p3",
+      "pri": "critical",
+      "start": "2026-05-07",
+      "end": "2026-05-09",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T25",
+      "desc": "Validate: camera, hotspot/tethering, app-blocking, OS restrictions",
+      "owner": "Amitosh / TSSA",
+      "oc": "am",
+      "phase": "p3",
+      "pri": "critical",
+      "start": "2026-05-09",
+      "end": "2026-05-12",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T26",
+      "desc": "Validate update channels & compliance monitoring",
+      "owner": "Amitosh / TSSA",
+      "oc": "am",
+      "phase": "p3",
+      "pri": "high",
+      "start": "2026-05-09",
+      "end": "2026-05-12",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T27",
+      "desc": "Validate certificate-based authentication workflows",
+      "owner": "Amitosh / TSSA",
+      "oc": "am",
+      "phase": "p3",
+      "pri": "high",
+      "start": "2026-05-09",
+      "end": "2026-05-12",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T28",
+      "desc": "Validate Defender for Endpoint onboarding & risk signal reporting",
+      "owner": "Amitosh",
+      "oc": "am",
+      "phase": "p3",
+      "pri": "high",
+      "start": "2026-05-09",
+      "end": "2026-05-12",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T29",
+      "desc": "Document pilot behaviour; make configuration adjustments",
+      "owner": "Amitosh",
+      "oc": "am",
+      "phase": "p3",
+      "pri": "medium",
+      "start": "2026-05-12",
+      "end": "2026-05-14",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T30",
+      "desc": "Produce POC Validation Findings & Refinements document",
+      "owner": "Amitosh / Rejaa",
+      "oc": "am",
+      "phase": "p3",
+      "pri": "high",
+      "start": "2026-05-13",
+      "end": "2026-05-15",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T31",
+      "desc": "Communicate Phase 4 start to inspectors (backup, prep)",
+      "owner": "TSSA (Rizgar)",
+      "oc": "rz",
+      "phase": "p4",
+      "pri": "medium",
+      "start": "2026-05-12",
+      "end": "2026-05-15",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T32",
+      "desc": "Enroll up to 30 users (15 inspectors + up to 15 IT)",
+      "owner": "Amitosh / TSSA",
+      "oc": "am",
+      "phase": "p4",
+      "pri": "critical",
+      "start": "2026-05-15",
+      "end": "2026-05-20",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T33",
+      "desc": "Validate security config consistency & non-compliance alerting",
+      "owner": "Amitosh / TSSA",
+      "oc": "am",
+      "phase": "p4",
+      "pri": "high",
+      "start": "2026-05-20",
+      "end": "2026-05-27",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T34",
+      "desc": "Validate app deployment (up to 5 apps incl. Office suite)",
+      "owner": "Amitosh / TSSA",
+      "oc": "am",
+      "phase": "p4",
+      "pri": "high",
+      "start": "2026-05-20",
+      "end": "2026-05-27",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T35",
+      "desc": "Validate connectivity restrictions under real-world use",
+      "owner": "TSSA (Inspectors)",
+      "oc": "ts",
+      "phase": "p4",
+      "pri": "critical",
+      "start": "2026-05-20",
+      "end": "2026-05-27",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T36",
+      "desc": "Validate Defender risk-based access & cert-based auth",
+      "owner": "Amitosh / TSSA",
+      "oc": "am",
+      "phase": "p4",
+      "pri": "high",
+      "start": "2026-05-20",
+      "end": "2026-05-27",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T37",
+      "desc": "Compliance tuning & policy refinement",
+      "owner": "Amitosh",
+      "oc": "am",
+      "phase": "p4",
+      "pri": "medium",
+      "start": "2026-05-22",
+      "end": "2026-05-28",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T38",
+      "desc": "Produce Production Pilot Validation Report",
+      "owner": "Amitosh / Rejaa",
+      "oc": "am",
+      "phase": "p4",
+      "pri": "high",
+      "start": "2026-05-26",
+      "end": "2026-05-30",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T39",
+      "desc": "Deliver 1–2 hour KT session (policy, enrollment, compliance)",
+      "owner": "Amitosh / Hassan",
+      "oc": "am",
+      "phase": "p5",
+      "pri": "high",
+      "start": "2026-05-27",
+      "end": "2026-05-29",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T40",
+      "desc": "Provide administrative runbook (enrollment, policy, limitations)",
+      "owner": "Amitosh / Rejaa",
+      "oc": "am",
+      "phase": "p5",
+      "pri": "high",
+      "start": "2026-05-27",
+      "end": "2026-05-30",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T41",
+      "desc": "Submit final deliverables for TSSA review and acceptance",
+      "owner": "Rejaa",
+      "oc": "rj",
+      "phase": "p5",
+      "pri": "critical",
+      "start": "2026-05-29",
+      "end": "2026-05-30",
+      "status": "not-started",
+      "chk": false
+    },
+    {
+      "id": "T42",
+      "desc": "Weekly Friday morning status cadence calls (all parties)",
+      "owner": "Rejaa",
+      "oc": "rj",
+      "phase": "pm",
+      "pri": "medium",
+      "start": "2026-04-11",
+      "end": "2026-05-30",
+      "status": "ongoing",
+      "chk": false
+    },
+    {
+      "id": "T43",
+      "desc": "As-needed technical working sessions",
+      "owner": "Amitosh / Rejaa",
+      "oc": "am",
+      "phase": "pm",
+      "pri": "medium",
+      "start": "2026-04-07",
+      "end": "2026-05-30",
+      "status": "ongoing",
+      "chk": false
+    },
+    {
+      "id": "T44",
+      "desc": "Maintain & distribute project plan and risk log",
+      "owner": "Rejaa",
+      "oc": "rj",
+      "phase": "pm",
+      "pri": "medium",
+      "start": "2026-04-07",
+      "end": "2026-05-30",
+      "status": "ongoing",
+      "chk": false
+    },
+    {
+      "id": "T45",
+      "desc": "SharePoint site setup for centralised documentation",
+      "owner": "TSSA (Mandeep)",
+      "oc": "mp",
+      "phase": "pm",
+      "pri": "medium",
+      "start": "2026-04-07",
+      "end": "2026-04-11",
+      "status": "complete",
+      "chk": true
+    },
+    {
+      "id": "T46",
+      "desc": "Coordinate fiscal year-end invoicing with CDW (Niel)",
+      "owner": "Rizgar / Niel",
+      "oc": "rz",
+      "phase": "pm",
+      "pri": "medium",
+      "start": "2026-04-01",
+      "end": "2026-04-30",
+      "status": "in-progress",
+      "chk": false
+    }
+  ],
+  "pmActions": [
+    {
+      "owner": "Rejaa Khalid",
+      "oc": "rj",
+      "desc": "Send post-meeting email: minutes, kick-off deck, access requirements list",
+      "due": "April 1, 2026",
+      "status": "complete"
+    },
+    {
+      "owner": "Rejaa Khalid",
+      "oc": "rj",
+      "desc": "Schedule weekly Friday morning cadence call (before noon) with all parties",
+      "due": "April 4, 2026",
+      "status": "complete"
+    },
+    {
+      "owner": "Rejaa Khalid",
+      "oc": "rj",
+      "desc": "Consult Amitosh; propose 2–3 slots for Phase 1 technical working session",
+      "due": "April 2, 2026",
+      "status": "complete"
+    },
+    {
+      "owner": "Rejaa Khalid",
+      "oc": "rj",
+      "desc": "Set up project plan and shared risk log; distribute to all parties",
+      "due": "April 15, 2026",
+      "status": "in-progress"
+    },
+    {
+      "owner": "TSSA (Mandeep)",
+      "oc": "mp",
+      "desc": "Create and configure SharePoint site for project documentation",
+      "due": "Early next week",
+      "status": "complete"
+    },
+    {
+      "owner": "Khalid Mahmood",
+      "oc": "km",
+      "desc": "Forward Bruce Power device restriction documentation to Hassan and Rejaa",
+      "due": "ASAP",
+      "status": "in-progress"
+    },
+    {
+      "owner": "TSSA (Rizgar)",
+      "oc": "rz",
+      "desc": "Confirm accessibility of new AirWatch / Workspace ONE URL (public vs. firewall)",
+      "due": "Before Phase 1 workshop",
+      "status": "not-started"
+    },
+    {
+      "owner": "TSSA (Rizgar)",
+      "oc": "rz",
+      "desc": "Begin provisioning required access: M365, ABM, Defender, PKI, AirWatch",
+      "due": "Upon receipt of email",
+      "status": "in-progress"
+    },
+    {
+      "owner": "TSSA (Rizgar)",
+      "oc": "rz",
+      "desc": "Begin communication with nuclear inspectors re: pilot participation, timeline, backup prep",
+      "due": "Ahead of Phase 3",
+      "status": "not-started"
+    }
+  ],
+  "pmRisks": [
+    {
+      "id": "R1",
+      "name": "Bruce Power restrictions not received",
+      "detail": "Blocks Phase 1 completion and architecture decisions",
+      "sev": "high",
+      "mitigation": "Khalid to escalate with Bruce Power; Rejaa to follow up weekly",
+      "owner": "Khalid / Rejaa"
+    },
+    {
+      "id": "R2",
+      "name": "TSSA access provisioning delayed",
+      "detail": "M365, ABM, Defender, PKI, AirWatch — blocks Phase 2 start",
+      "sev": "high",
+      "mitigation": "Rizgar to begin provisioning immediately; Rejaa to track daily",
+      "owner": "Rizgar / Rejaa"
+    },
+    {
+      "id": "R3",
+      "name": "PKI/NDES infrastructure issues",
+      "detail": "Not operational or incompatible with Intune SCEP/PKCS",
+      "sev": "high",
+      "mitigation": "BITSUMMIT consumes existing PKI only; flag early in Phase 1",
+      "owner": "TSSA / Amitosh"
+    },
+    {
+      "id": "R4",
+      "name": "iCloud governance complexity",
+      "detail": "Conflicting MDM profiles if AirWatch-enrolled device restores used",
+      "sev": "medium",
+      "mitigation": "Define posture in Phase 1; pilot complex configs in Phase 4",
+      "owner": "Amitosh / Rizgar"
+    },
+    {
+      "id": "R5",
+      "name": "Inspector device availability for POC",
+      "detail": "Risk of disrupting inspector workflow during enrollment",
+      "sev": "medium",
+      "mitigation": "Use Sutharsan's device / test device for Phase 3 POC",
+      "owner": "TSSA (Sutharsan)"
+    },
+    {
+      "id": "R6",
+      "name": "Fiscal year-end invoicing",
+      "detail": "End of April — billing complications with CDW",
+      "sev": "medium",
+      "mitigation": "Rizgar to coordinate with Niel (CDW) on invoicing schedule",
+      "owner": "Rizgar / Niel"
+    },
+    {
+      "id": "R7",
+      "name": "Device OS restriction API support",
+      "detail": "Device models may not support camera/tethering restriction APIs",
+      "sev": "medium",
+      "mitigation": "Identify pilot device models in Phase 1, confirm OS support",
+      "owner": "Amitosh / TSSA"
+    },
+    {
+      "id": "R8",
+      "name": "Scope creep",
+      "detail": "Requests beyond nuclear inspector pilot & foundational build",
+      "sev": "low",
+      "mitigation": "SOW excludes full AirWatch replacement (~300 devices). Changes require formal CR",
+      "owner": "Rejaa"
+    }
+  ],
+  "pmDeps": [
+    {
+      "from": "Bruce Power Docs (T05)",
+      "to": "Architecture Design (T09)",
+      "c": "#ef4444"
+    },
+    {
+      "from": "Access Provisioning (T08)",
+      "to": "All Phase 2 Tasks",
+      "c": "#ef4444"
+    },
+    {
+      "from": "PKI Infrastructure (TSSA)",
+      "to": "Cert-Based Auth (T16)",
+      "c": "#6366f1"
+    },
+    {
+      "from": "Defender Licensing (T04)",
+      "to": "Defender Integration (T17)",
+      "c": "#3b82f6"
+    },
+    {
+      "from": "ABM Status (T03)",
+      "to": "iOS Enrollment (T24)",
+      "c": "#8b5cf6"
+    },
+    {
+      "from": "Environment Build (P2)",
+      "to": "POC Enrollment (P3)",
+      "c": "#f59e0b"
+    },
+    {
+      "from": "POC Validation (T30)",
+      "to": "Production Pilot (P4)",
+      "c": "#22c55e"
+    },
+    {
+      "from": "iCloud Posture (T06)",
+      "to": "App Store & iCloud Controls (T19)",
+      "c": "#d97706"
+    },
+    {
+      "from": "All Deliverables (D1–D6)",
+      "to": "Final Acceptance (T41)",
+      "c": "#F12300"
+    }
+  ]
 }
