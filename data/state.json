@@ -22,8 +22,8 @@
     },
     {
       "id": "T05",
-      "status": "in-progress",
-      "chk": false
+      "status": "complete",
+      "chk": true
     },
     {
       "id": "T06",
@@ -37,12 +37,12 @@
     },
     {
       "id": "T08",
-      "status": "in-progress",
-      "chk": false
+      "status": "complete",
+      "chk": true
     },
     {
       "id": "T09",
-      "status": "not-started",
+      "status": "in-progress",
       "chk": false
     },
     {
@@ -301,7 +301,7 @@
       "status": "not-started"
     }
   ],
-  "savedAt": "2026-04-17T13:45:52.162Z",
+  "savedAt": "2026-04-17T13:46:52.159Z",
   "savedBy": "portal",
   "pmTasks": [
     {
