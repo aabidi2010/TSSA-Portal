@@ -224,11 +224,6 @@
       "id": "T45",
       "status": "complete",
       "chk": true
-    },
-    {
-      "id": "T46",
-      "status": "in-progress",
-      "chk": false
     }
   ],
   "deliverables": [
@@ -301,7 +296,7 @@
       "status": "not-started"
     }
   ],
-  "savedAt": "2026-04-17T13:48:52.153Z",
+  "savedAt": "2026-04-17T13:49:52.162Z",
   "savedBy": "portal",
   "pmTasks": [
     {
@@ -843,18 +838,6 @@
       "end": "2026-04-11",
       "status": "complete",
       "chk": true
-    },
-    {
-      "id": "T46",
-      "desc": "Coordinate fiscal year-end invoicing with CDW (Niel)",
-      "owner": "Rizgar / Niel",
-      "oc": "rz",
-      "phase": "pm",
-      "pri": "medium",
-      "start": "2026-04-01",
-      "end": "2026-04-30",
-      "status": "in-progress",
-      "chk": false
     }
   ],
   "pmActions": [
