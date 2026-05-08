@@ -274,11 +274,11 @@
     },
     {
       "idx": 2,
-      "status": "complete"
+      "status": "in-progress"
     },
     {
       "idx": 3,
-      "status": "in-progress"
+      "status": "complete"
     },
     {
       "idx": 4,
@@ -286,22 +286,18 @@
     },
     {
       "idx": 5,
-      "status": "complete"
+      "status": "not-started"
     },
     {
       "idx": 6,
-      "status": "not-started"
-    },
-    {
-      "idx": 7,
       "status": "in-progress"
     },
     {
-      "idx": 8,
+      "idx": 7,
       "status": "not-started"
     }
   ],
-  "savedAt": "2026-05-08T13:11:57.546Z",
+  "savedAt": "2026-05-08T13:12:03.175Z",
   "savedBy": "portal",
   "pmTasks": [
     {
@@ -846,13 +842,6 @@
     }
   ],
   "pmActions": [
-    {
-      "owner": "Rejaa Khalid",
-      "oc": "rj",
-      "desc": "Send post-meeting email: minutes, kick-off deck, access requirements list",
-      "due": "April 1, 2026",
-      "status": "complete"
-    },
     {
       "owner": "Rejaa Khalid",
       "oc": "rj",
