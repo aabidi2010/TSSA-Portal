@@ -275,13 +275,9 @@
     {
       "idx": 2,
       "status": "in-progress"
-    },
-    {
-      "idx": 3,
-      "status": "complete"
     }
   ],
-  "savedAt": "2026-05-08T13:12:23.610Z",
+  "savedAt": "2026-05-08T13:12:26.070Z",
   "savedBy": "portal",
   "pmTasks": [
     {
@@ -846,13 +842,6 @@
       "desc": "Set up project plan and shared risk log; distribute to all parties",
       "due": "April 15, 2026",
       "status": "in-progress"
-    },
-    {
-      "owner": "TSSA (Mandeep)",
-      "oc": "mp",
-      "desc": "Create and configure SharePoint site for project documentation",
-      "due": "Early next week",
-      "status": "complete"
     }
   ],
   "pmRisks": [
