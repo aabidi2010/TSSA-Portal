@@ -287,13 +287,9 @@
     {
       "idx": 5,
       "status": "not-started"
-    },
-    {
-      "idx": 6,
-      "status": "in-progress"
     }
   ],
-  "savedAt": "2026-05-08T13:12:14.975Z",
+  "savedAt": "2026-05-08T13:12:17.841Z",
   "savedBy": "portal",
   "pmTasks": [
     {
@@ -879,13 +875,6 @@
       "desc": "Confirm accessibility of new AirWatch / Workspace ONE URL (public vs. firewall)",
       "due": "Before Phase 1 workshop",
       "status": "not-started"
-    },
-    {
-      "owner": "TSSA (Rizgar)",
-      "oc": "rz",
-      "desc": "Begin provisioning required access: M365, ABM, Defender, PKI, AirWatch",
-      "due": "Upon receipt of email",
-      "status": "in-progress"
     }
   ],
   "pmRisks": [
