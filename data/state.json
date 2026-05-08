@@ -278,7 +278,7 @@
     },
     {
       "idx": 3,
-      "status": "in-progress"
+      "status": "complete"
     },
     {
       "idx": 4,
@@ -286,7 +286,7 @@
     },
     {
       "idx": 5,
-      "status": "in-progress"
+      "status": "complete"
     },
     {
       "idx": 6,
@@ -294,14 +294,18 @@
     },
     {
       "idx": 7,
-      "status": "in-progress"
+      "status": "complete"
     },
     {
       "idx": 8,
-      "status": "not-started"
+      "status": "complete"
+    },
+    {
+      "idx": 9,
+      "status": "complete"
     }
   ],
-  "savedAt": "2026-05-08T13:18:30.479Z",
+  "savedAt": "2026-05-08T13:19:30.748Z",
   "savedBy": "portal",
   "pmTasks": [
     {
@@ -915,6 +919,13 @@
       "desc": "Set annual calendar reminder for ABM enrollment program token renewal (2027)",
       "due": "May 15, 2026",
       "status": "not-started"
+    },
+    {
+      "owner": "Sutharsan",
+      "oc": "sr",
+      "desc": "Build Apple ABM ↔ Intune MDM connector + enrollment program token",
+      "due": "May 15, 2026",
+      "status": "complete"
     }
   ],
   "pmRisks": [
