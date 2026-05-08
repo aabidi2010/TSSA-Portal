@@ -263,13 +263,8 @@
       "progress": 0
     }
   ],
-  "actions": [
-    {
-      "idx": 0,
-      "status": "complete"
-    }
-  ],
-  "savedAt": "2026-05-08T13:12:30.997Z",
+  "actions": [],
+  "savedAt": "2026-05-08T13:12:34.020Z",
   "savedBy": "portal",
   "pmTasks": [
     {
@@ -813,15 +808,7 @@
       "chk": true
     }
   ],
-  "pmActions": [
-    {
-      "owner": "Rejaa Khalid",
-      "oc": "rj",
-      "desc": "Schedule weekly Friday morning cadence call (before noon) with all parties",
-      "due": "April 4, 2026",
-      "status": "complete"
-    }
-  ],
+  "pmActions": [],
   "pmRisks": [
     {
       "id": "R1",
