@@ -305,7 +305,7 @@
       "status": "not-started"
     }
   ],
-  "savedAt": "2026-05-08T13:14:43.677Z",
+  "savedAt": "2026-05-08T13:14:51.643Z",
   "savedBy": "portal",
   "pmTasks": [
     {
@@ -490,7 +490,7 @@
     },
     {
       "id": "T16",
-      "desc": "Configure certificate-based auth (SCEP/PKCS) ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ PKI by TSSA",
+      "desc": "Configure certificate-based auth (SCEP/PKCS) ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ PKI by TSSA",
       "owner": "Amitosh / TSSA",
       "oc": "am",
       "phase": "p2",
@@ -586,7 +586,7 @@
     },
     {
       "id": "T24",
-      "desc": "Enroll 2ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ3 inspector devices into Intune",
+      "desc": "Enroll 2ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ3 inspector devices into Intune",
       "owner": "Amitosh / Sutharsan",
       "oc": "am",
       "phase": "p3",
@@ -766,7 +766,7 @@
     },
     {
       "id": "T39",
-      "desc": "Deliver 1ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ2 hour KT session (policy, enrollment, compliance)",
+      "desc": "Deliver 1ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ2 hour KT session (policy, enrollment, compliance)",
       "owner": "Amitosh / Hassan",
       "oc": "am",
       "phase": "p5",
@@ -867,7 +867,7 @@
     {
       "owner": "Rejaa Khalid",
       "oc": "rj",
-      "desc": "Consult Amitosh; propose 2–3 slots for Phase 1 technical working session",
+      "desc": "Consult Amitosh; propose 2â3 slots for Phase 1 technical working session",
       "due": "April 2, 2026",
       "status": "complete"
     },
@@ -933,7 +933,7 @@
     {
       "id": "R2",
       "name": "TSSA access provisioning delayed",
-      "detail": "M365, ABM, Defender, PKI, AirWatch ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ blocks Phase 2 start",
+      "detail": "M365, ABM, Defender, PKI, AirWatch ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ blocks Phase 2 start",
       "sev": "high",
       "mitigation": "Rizgar to begin provisioning immediately; Rejaa to track daily",
       "owner": "Rizgar / Rejaa"
@@ -965,7 +965,7 @@
     {
       "id": "R6",
       "name": "Fiscal year-end invoicing",
-      "detail": "End of April ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ billing complications with CDW",
+      "detail": "End of April ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ billing complications with CDW",
       "sev": "medium",
       "mitigation": "Rizgar to coordinate with Niel (CDW) on invoicing schedule",
       "owner": "Rizgar / Niel"
@@ -1029,7 +1029,7 @@
       "c": "#d97706"
     },
     {
-      "from": "All Deliverables (D1ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂD6)",
+      "from": "All Deliverables (D1ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂD6)",
       "to": "Final Acceptance (T41)",
       "c": "#F12300"
     }
