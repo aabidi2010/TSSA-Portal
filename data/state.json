@@ -291,13 +291,9 @@
     {
       "idx": 6,
       "status": "in-progress"
-    },
-    {
-      "idx": 7,
-      "status": "not-started"
     }
   ],
-  "savedAt": "2026-05-08T13:12:03.175Z",
+  "savedAt": "2026-05-08T13:12:14.975Z",
   "savedBy": "portal",
   "pmTasks": [
     {
@@ -890,13 +886,6 @@
       "desc": "Begin provisioning required access: M365, ABM, Defender, PKI, AirWatch",
       "due": "Upon receipt of email",
       "status": "in-progress"
-    },
-    {
-      "owner": "TSSA (Rizgar)",
-      "oc": "rz",
-      "desc": "Begin communication with nuclear inspectors re: pilot participation, timeline, backup prep",
-      "due": "Ahead of Phase 3",
-      "status": "not-started"
     }
   ],
   "pmRisks": [
