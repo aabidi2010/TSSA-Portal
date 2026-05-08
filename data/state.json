@@ -271,13 +271,9 @@
     {
       "idx": 1,
       "status": "complete"
-    },
-    {
-      "idx": 2,
-      "status": "in-progress"
     }
   ],
-  "savedAt": "2026-05-08T13:12:26.070Z",
+  "savedAt": "2026-05-08T13:12:28.176Z",
   "savedBy": "portal",
   "pmTasks": [
     {
@@ -835,13 +831,6 @@
       "desc": "Consult Amitosh; propose 2ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ3 slots for Phase 1 technical working session",
       "due": "April 2, 2026",
       "status": "complete"
-    },
-    {
-      "owner": "Rejaa Khalid",
-      "oc": "rj",
-      "desc": "Set up project plan and shared risk log; distribute to all parties",
-      "due": "April 15, 2026",
-      "status": "in-progress"
     }
   ],
   "pmRisks": [
