@@ -279,13 +279,9 @@
     {
       "idx": 3,
       "status": "complete"
-    },
-    {
-      "idx": 4,
-      "status": "complete"
     }
   ],
-  "savedAt": "2026-05-08T13:12:20.552Z",
+  "savedAt": "2026-05-08T13:12:23.610Z",
   "savedBy": "portal",
   "pmTasks": [
     {
@@ -857,13 +853,6 @@
       "desc": "Create and configure SharePoint site for project documentation",
       "due": "Early next week",
       "status": "complete"
-    },
-    {
-      "owner": "Khalid Mahmood",
-      "oc": "km",
-      "desc": "Forward Bruce Power device restriction documentation to Hassan and Rejaa",
-      "due": "ASAP",
-      "status": "in-progress"
     }
   ],
   "pmRisks": [
