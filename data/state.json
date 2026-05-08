@@ -263,8 +263,45 @@
       "progress": 0
     }
   ],
-  "actions": [],
-  "savedAt": "2026-05-08T13:12:57.544Z",
+  "actions": [
+    {
+      "idx": 0,
+      "status": "complete"
+    },
+    {
+      "idx": 1,
+      "status": "complete"
+    },
+    {
+      "idx": 2,
+      "status": "complete"
+    },
+    {
+      "idx": 3,
+      "status": "in-progress"
+    },
+    {
+      "idx": 4,
+      "status": "complete"
+    },
+    {
+      "idx": 5,
+      "status": "in-progress"
+    },
+    {
+      "idx": 6,
+      "status": "not-started"
+    },
+    {
+      "idx": 7,
+      "status": "in-progress"
+    },
+    {
+      "idx": 8,
+      "status": "not-started"
+    }
+  ],
+  "savedAt": "2026-05-08T13:14:21.089Z",
   "savedBy": "portal",
   "pmTasks": [
     {
@@ -449,7 +486,7 @@
     },
     {
       "id": "T16",
-      "desc": "Configure certificate-based auth (SCEP/PKCS) ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ PKI by TSSA",
+      "desc": "Configure certificate-based auth (SCEP/PKCS) ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ PKI by TSSA",
       "owner": "Amitosh / TSSA",
       "oc": "am",
       "phase": "p2",
@@ -545,7 +582,7 @@
     },
     {
       "id": "T24",
-      "desc": "Enroll 2ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ3 inspector devices into Intune",
+      "desc": "Enroll 2ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ3 inspector devices into Intune",
       "owner": "Amitosh / Sutharsan",
       "oc": "am",
       "phase": "p3",
@@ -725,7 +762,7 @@
     },
     {
       "id": "T39",
-      "desc": "Deliver 1ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ2 hour KT session (policy, enrollment, compliance)",
+      "desc": "Deliver 1ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ2 hour KT session (policy, enrollment, compliance)",
       "owner": "Amitosh / Hassan",
       "oc": "am",
       "phase": "p5",
@@ -808,7 +845,71 @@
       "chk": true
     }
   ],
-  "pmActions": [],
+  "pmActions": [
+    {
+      "owner": "Rejaa Khalid",
+      "oc": "rj",
+      "desc": "Send post-meeting email: minutes, kick-off deck, access requirements list",
+      "due": "April 1, 2026",
+      "status": "complete"
+    },
+    {
+      "owner": "Rejaa Khalid",
+      "oc": "rj",
+      "desc": "Schedule weekly Friday morning cadence call (before noon) with all parties",
+      "due": "April 4, 2026",
+      "status": "complete"
+    },
+    {
+      "owner": "Rejaa Khalid",
+      "oc": "rj",
+      "desc": "Consult Amitosh; propose 2–3 slots for Phase 1 technical working session",
+      "due": "April 2, 2026",
+      "status": "complete"
+    },
+    {
+      "owner": "Rejaa Khalid",
+      "oc": "rj",
+      "desc": "Set up project plan and shared risk log; distribute to all parties",
+      "due": "April 15, 2026",
+      "status": "in-progress"
+    },
+    {
+      "owner": "TSSA (Mandeep)",
+      "oc": "mp",
+      "desc": "Create and configure SharePoint site for project documentation",
+      "due": "Early next week",
+      "status": "complete"
+    },
+    {
+      "owner": "Khalid Mahmood",
+      "oc": "km",
+      "desc": "Forward Bruce Power device restriction documentation to Hassan and Rejaa",
+      "due": "ASAP",
+      "status": "in-progress"
+    },
+    {
+      "owner": "TSSA (Rizgar)",
+      "oc": "rz",
+      "desc": "Confirm accessibility of new AirWatch / Workspace ONE URL (public vs. firewall)",
+      "due": "Before Phase 1 workshop",
+      "status": "not-started"
+    },
+    {
+      "owner": "TSSA (Rizgar)",
+      "oc": "rz",
+      "desc": "Begin provisioning required access: M365, ABM, Defender, PKI, AirWatch",
+      "due": "Upon receipt of email",
+      "status": "in-progress"
+    },
+    {
+      "owner": "TSSA (Rizgar)",
+      "oc": "rz",
+      "desc": "Begin communication with nuclear inspectors re: pilot participation, timeline, backup prep",
+      "due": "Ahead of Phase 3",
+      "status": "not-started"
+    }
+  ],
   "pmRisks": [
     {
       "id": "R1",
@@ -821,7 +922,7 @@
     {
       "id": "R2",
       "name": "TSSA access provisioning delayed",
-      "detail": "M365, ABM, Defender, PKI, AirWatch ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ blocks Phase 2 start",
+      "detail": "M365, ABM, Defender, PKI, AirWatch ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ blocks Phase 2 start",
       "sev": "high",
       "mitigation": "Rizgar to begin provisioning immediately; Rejaa to track daily",
       "owner": "Rizgar / Rejaa"
@@ -853,7 +954,7 @@
     {
       "id": "R6",
       "name": "Fiscal year-end invoicing",
-      "detail": "End of April ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ billing complications with CDW",
+      "detail": "End of April ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ billing complications with CDW",
       "sev": "medium",
       "mitigation": "Rizgar to coordinate with Niel (CDW) on invoicing schedule",
       "owner": "Rizgar / Niel"
@@ -917,7 +1018,7 @@
       "c": "#d97706"
     },
     {
-      "from": "All Deliverables (D1ÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂD6)",
+      "from": "All Deliverables (D1ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂD6)",
       "to": "Final Acceptance (T41)",
       "c": "#F12300"
     }
